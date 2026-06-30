@@ -1,0 +1,82 @@
+{{- /*
+head/jsonld.html — Schema.org structured data (AI / crawler friendly).
+
+- Single pages (BlogPosting): headline, dates, author, publisher, image,
+  keywords, license, mainEntityOfPage.
+- List pages (home, sections, taxonomies): a WebSite node with a
+  SearchAction potential action so AI agents can discover site search.
+
+All values are plainified so no stray HTML leaks into the JSON payload.
+
+@context {page} page The current page.
+*/}}
+
+{{- $title := .Title | default site.Title }}
+{{- $desc := .Description | default site.Params.description | default (plainify .Summary) | plainify }}
+{{- $author := .Params.author | default site.Params.author | default site.Params.creator | default site.Title }}
+{{- $logo := or site.Params.logo site.Params.default_og_image }}
+
+{{- $absLogo := "" }}
+{{- with $logo }}
+  {{- $absLogo = . }}
+  {{- if not (strings.HasPrefix $absLogo "http") }}
+    {{- $absLogo = printf "%s/%s" (strings.TrimSuffix "/" site.BaseURL) (strings.TrimPrefix "/" $absLogo) }}
+  {{- end }}
+{{- end }}
+
+{{- if .IsPage }}
+  {{- $image := "" }}
+  {{- with .Resources.GetMatch "cover.*" }}{{ $image = .Permalink }}{{ end }}
+  {{- if not $image }}{{ with .Resources.GetMatch "featured.*" }}{{ $image = .Permalink }}{{ end }}{{ end }}
+  {{- if not $image }}{{ with .Params.cover }}{{ $image = . }}{{ end }}{{ end }}
+  {{- with $image }}
+    {{- if not (strings.HasPrefix $image "http") }}
+      {{- $image = printf "%s/%s" (strings.TrimSuffix "/" site.BaseURL) (strings.TrimPrefix "/" $image) }}
+    {{- end }}
+  {{- end }}
+
+  {{- $schema := dict
+    "@context" "https://schema.org"
+    "@type" "BlogPosting"
+    "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+    "headline" ($title | plainify | truncate 110)
+    "description" ($desc | truncate 300)
+    "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+    "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+    "author" (dict "@type" "Person" "name" ($author | plainify))
+    "publisher" (dict "@type" "Organization" "name" (site.Title | plainify))
+  }}
+  {{- with $absLogo }}
+    {{- $logoObj := dict "@type" "ImageObject" "url" . }}
+    {{- $schema = merge $schema (dict "publisher" (dict "@type" "Organization" "name" (site.Title | plainify) "logo" $logoObj)) }}
+  {{- end }}
+  {{- with $image }}
+    {{- $schema = merge $schema (dict "image" .) }}
+  {{- end }}
+  {{- with .Params.tags }}
+    {{- $schema = merge $schema (dict "keywords" (delimit . ", ")) }}
+  {{- end }}
+  {{- with .Params.license }}
+    {{- $schema = merge $schema (dict "license" .) }}
+  {{- end }}
+<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+{{- else }}
+  {{- $schema := dict
+    "@context" "https://schema.org"
+    "@type" "WebSite"
+    "name" (site.Title | plainify)
+    "url" site.BaseURL
+    "description" ($desc | truncate 300)
+    "inLanguage" site.Language.Lang
+    "potentialAction" (dict
+      "@type" "SearchAction"
+      "target" (printf "%s/search?q={search_term_string}" (strings.TrimSuffix "/" site.BaseURL))
+      "query-input" "required name=search_term_string"
+    )
+  }}
+  {{- with $absLogo }}
+    {{- $logoObj := dict "@type" "ImageObject" "url" . }}
+    {{- $schema = merge $schema (dict "publisher" (dict "@type" "Organization" "name" (site.Title | plainify) "logo" $logoObj)) }}
+  {{- end }}
+<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+{{- end }}

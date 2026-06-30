@@ -1,0 +1,10 @@
+name = "ReaderFirst"
+description = "A minimalist, reading-first Hugo theme optimized for both humans and AI agents."
+homepage = "https://github.com/sos/hugo-theme-reader-first"
+tags = ["minimalist", "clean", "responsive", "blog", "reader", "ai-friendly"]
+features = ["minimalist", "speed", "json-ld", "dark-mode", "accessibility"]
+min_version = "0.146.0"
+
+[author]
+  name = "sos"
+  homepage = "https://github.com/sos"

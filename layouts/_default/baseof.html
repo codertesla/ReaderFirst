@@ -1,0 +1,35 @@
+{{- /*
+baseof.html — ReaderFirst base page skeleton.
+
+Reading-first + AI-friendly:
+- Semantic HTML5 landmarks (<header>, <main>, <footer>, <nav>) so crawlers
+  and screen readers can navigate by region, not by <div>s.
+- <html data-theme> is set BEFORE paint by the no-flash script in head.html,
+  so CSS Custom Properties resolve to the right palette on the first frame.
+- An a11y "skip to content" link is the first focusable element.
+- <main id="main"> is the single region pages override via {{ block "main" . }}.
+
+@context {page} page The current page.
+*/}}
+<!DOCTYPE html>
+<html lang="{{ or site.Language.Locale site.Language.Lang "en" }}"
+      dir="{{ or site.Language.Direction `ltr` }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip-link" href="#main">{{ i18n "skipToContent" }}</a>
+
+  <header class="site-header">
+    {{ partial "header.html" . }}
+  </header>
+
+  <main id="main" class="site-main">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer class="site-footer">
+    {{ partial "footer.html" . }}
+  </footer>
+</body>
+</html>

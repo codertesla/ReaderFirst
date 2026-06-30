@@ -1,0 +1,25 @@
+{{- /*
+head/js.html — optional, minimal vanilla JS.
+
+ReaderFirst ships almost no JS by design (the theme toggle is an inline
+script in head.html). This partial only emits a <script> when the project
+provides assets/js/main.js, so the default build stays JS-free.
+
+Uses resources.Minify + fingerprint (standard Hugo, no esbuild dependency).
+
+@context {page} page The current page.
+*/}}
+
+{{- with resources.Get "js/main.js" }}
+  {{- $js := . }}
+  {{- if not hugo.IsDevelopment }}
+    {{- $js = $js | resources.Minify }}
+  {{- end }}
+  {{- if hugo.IsDevelopment }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+  {{- else }}
+    {{- with $js | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
+    {{- end }}
+  {{- end }}
+{{- end }}
