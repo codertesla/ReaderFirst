@@ -1,0 +1,270 @@
+/*
+  ReaderFirst — main.css
+  ---------------------------------------------------------------------------
+  Reading-first, speed-first, no framework, no CDN.
+  - Light/Dark palettes via CSS Custom Properties, switched by [data-theme]
+    on <html> (set before paint by head.html's no-flash script).
+  - One file, no @import (avoids render-blocking chained requests), inlined
+    in <head> in production. Well under 10KB.
+  - Fluid type via clamp(), generous line-height, constrained measure for
+    comfortable reading on mobile and desktop.
+  ---------------------------------------------------------------------------
+*/
+
+/* --- Design tokens ------------------------------------------------------- */
+:root {
+  /* Light palette (default) */
+  --bg:        #fafafa;
+  --bg-soft:   #f0f0f2;
+  --fg:        #1a1a1f;
+  --fg-muted:  #5b5b66;
+  --border:    #e2e2e6;
+  --link:      #1a3a8a;
+  --link-hover:#0a2a6a;
+  --accent:    #1a3a8a;
+  --code-bg:   #efeff3;
+  --selection: #cfe0ff;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+               "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+               sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+  --measure:   70ch;          /* ideal reading line length       */
+  --max-width: 760px;         /* content column on large screens */
+  --line-height: 1.75;
+
+  --fs-base: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --fs-h1:   clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --fs-h2:   clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem);
+  --fs-h3:   clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+  --fs-small: 0.875rem;
+
+  /* Spacing scale */
+  --s-1: 0.25rem; --s-2: 0.5rem; --s-3: 0.75rem; --s-4: 1rem;
+  --s-5: 1.5rem;  --s-6: 2rem;  --s-7: 3rem;
+  --radius: 6px;
+}
+
+[data-theme="dark"] {
+  --bg:        #15151a;
+  --bg-soft:   #1d1d24;
+  --fg:        #e7e7ec;
+  --fg-muted:  #a0a0ad;
+  --border:    #2c2c36;
+  --link:      #8db4ff;
+  --link-hover:#a9c8ff;
+  --accent:    #8db4ff;
+  --code-bg:   #20202a;
+  --selection: #1f3a66;
+}
+
+/* --- Reset --------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--line-height);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+::selection { background: var(--selection); }
+
+img, picture, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--link-hover); }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* --- Skip link ----------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  left: var(--s-2);
+  top: -3rem;
+  z-index: 100;
+  padding: var(--s-2) var(--s-3);
+  background: var(--bg);
+  color: var(--link);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: var(--s-2); }
+
+/* --- Layout -------------------------------------------------------------- */
+.site-header,
+.site-main,
+.site-footer {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--s-4);
+}
+.site-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-3) var(--s-5);
+  padding-block: var(--s-5);
+  border-bottom: 1px solid var(--border);
+}
+.site-main { padding-block: var(--s-6); min-height: 60vh; }
+.site-footer {
+  padding-block: var(--s-5);
+  border-top: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+}
+
+.site-brand { margin-right: auto; }
+.site-title { margin: 0; font-size: 1.1rem; font-weight: 700; }
+.site-title a { color: var(--fg); text-decoration: none; }
+
+/* --- Navigation ---------------------------------------------------------- */
+.site-nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  margin: 0;
+  padding: 0;
+}
+.site-nav a {
+  color: var(--fg-muted);
+  text-decoration: none;
+  padding: var(--s-1) 0;
+}
+.site-nav a:hover,
+.site-nav a.active,
+.site-nav a[aria-current] { color: var(--fg); }
+
+/* --- Theme toggle -------------------------------------------------------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-soft);
+  color: var(--fg);
+  cursor: pointer;
+  font: inherit;
+}
+.theme-toggle-icon::before { content: "\263C"; } /* ☼  */
+[data-theme="dark"] .theme-toggle-icon::before { content: "\263D"; } /* ☾ */
+
+/* --- Prose / article typography ------------------------------------------ */
+.entry-header { margin-bottom: var(--s-5); }
+.entry-title,
+.site-main h1 {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-h1);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.site-main h2 { font-size: var(--fs-h2); margin: var(--s-6) 0 var(--s-3); line-height: 1.3; }
+.site-main h3 { font-size: var(--fs-h3); margin: var(--s-5) 0 var(--s-2); line-height: 1.35; }
+.site-main p,
+.site-main ul,
+.site-main ol,
+.site-main blockquote {
+  margin: 0 0 var(--s-4);
+  max-width: var(--measure);
+}
+.site-main ul,
+.site-main ol { padding-left: 1.5rem; }
+.site-main blockquote {
+  margin-inline: 0;
+  padding: var(--s-2) var(--s-4);
+  border-left: 3px solid var(--border);
+  color: var(--fg-muted);
+  font-style: italic;
+}
+.entry-meta,
+time {
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+}
+.entry-meta { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); margin-bottom: var(--s-5); }
+
+.entry-tags ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding: 0;
+  margin: var(--s-4) 0 0;
+  max-width: none;
+}
+.entry-tags a {
+  display: inline-block;
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+.entry-tags a:hover { color: var(--fg); border-color: var(--accent); }
+
+/* --- Post list ----------------------------------------------------------- */
+.post-list { list-style: none; margin: 0; padding: 0; }
+.post-list > li {
+  padding-block: var(--s-4);
+  border-top: 1px solid var(--border);
+}
+.post-list > li:first-child { border-top: 0; }
+.post-list h2 { margin: 0 0 var(--s-2); font-size: var(--fs-h3); }
+.post-list h2 a { color: var(--fg); text-decoration: none; }
+.post-list h2 a:hover { color: var(--link); }
+
+/* --- Code ---------------------------------------------------------------- */
+code, pre, kbd, samp { font-family: var(--font-mono); font-size: 0.95em; }
+:not(pre) > code {
+  padding: 0.1em 0.35em;
+  background: var(--code-bg);
+  border-radius: 3px;
+}
+pre {
+  margin: 0 0 var(--s-4);
+  padding: var(--s-4);
+  background: var(--code-bg);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  max-width: none;
+}
+pre code { padding: 0; background: none; }
+
+/* --- Tables -------------------------------------------------------------- */
+.site-main table {
+  width: 100%;
+  max-width: none;
+  border-collapse: collapse;
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-small);
+}
+th, td { padding: var(--s-2) var(--s-3); border: 1px solid var(--border); text-align: left; }
+th { background: var(--bg-soft); }
+
+hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
+
+/* --- Reduced motion ------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

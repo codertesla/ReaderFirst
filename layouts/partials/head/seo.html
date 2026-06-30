@@ -1,0 +1,42 @@
+{{- /*
+head/seo.html — core SEO meta tags.
+
+Description priority: page Description → site description → plainified Summary.
+Robots: noindex for drafts and the 404, index/follow otherwise.
+
+@context {page} page The current page.
+*/}}
+
+{{- $desc := .Description | default site.Params.description | default (plainify .Summary) | plainify }}
+<meta name="description" content="{{ $desc | truncate 160 }}">
+
+{{- with or .Params.author site.Params.author site.Params.creator }}
+<meta name="author" content="{{ . }}">
+{{- end }}
+
+{{- $keywords := .Keywords }}
+{{- if not $keywords }}{{ $keywords = .Params.tags }}{{ end }}
+{{- with $keywords }}
+<meta name="keywords" content="{{ delimit . ", " }}">
+{{- end }}
+
+{{- $robots := "index, follow" }}
+{{- if .Params.draft }}{{ $robots = "noindex, nofollow" }}{{ end }}
+{{- if eq .Kind "404" }}{{ $robots = "noindex" }}{{ end }}
+<meta name="robots" content="{{ $robots }}">
+
+<meta name="generator" content="Hugo {{ hugo.Version }}">
+
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- with .OutputFormats.Get "RSS" }}
+<link rel="alternate" type="application/rss+xml" title="{{ site.Title }} · RSS" href="{{ .RelPermalink }}">
+{{- end }}
+
+{{- with .OutputFormats.Get "JSON" }}
+<link rel="alternate" type="application/json" title="{{ site.Title }} · JSON Feed" href="{{ .RelPermalink }}">
+{{- end }}
+
+{{- /* theme-color matches the CSS Custom Property palettes in main.css. */ -}}
+<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15151a" media="(prefers-color-scheme: dark)">

@@ -1,0 +1,27 @@
+{{- /*
+head/css.html — ReaderFirst critical CSS.
+
+Speed-first: total CSS stays well under 10KB, no external framework, no CDN.
+- Development: emit a linked stylesheet (with the raw, unminified source) for
+  easy debugging and live source maps.
+- Production: minify with Hugo's built-in minifier (no esbuild/PostCSS deps,
+  so this works with Hugo *standard*, not only Extended) and inline the
+  result directly in <head> — zero render-blocking round-trips, no FOUC.
+
+Uses resources.Get + resources.Minify (standard Hugo) deliberately, so the
+theme does not depend on the Extended edition.
+
+@context {page} page The current page.
+*/}}
+
+{{- with resources.Get "css/main.css" }}
+  {{- $css := . }}
+  {{- if not hugo.IsDevelopment }}
+    {{- $css = $css | resources.Minify }}
+  {{- end }}
+  {{- if hugo.IsDevelopment }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}">
+  {{- else }}
+<style>{{ $css.Content | safeCSS }}</style>
+  {{- end }}
+{{- end }}

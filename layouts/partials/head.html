@@ -1,0 +1,44 @@
+{{- /*
+head.html — ReaderFirst <head> orchestrator.
+
+Philosophy: reading-first, AI-friendly, zero heavy JS, CSS < 10KB inlined.
+- A tiny inline no-flash theme script runs BEFORE paint to set data-theme
+  from localStorage or prefers-color-scheme (no external library, no FOUC).
+- Core meta, Open Graph/Twitter, and Schema.org JSON-LD are delegated to
+  modular sub-partials under partials/head/ so each concern stays isolated.
+- Critical CSS is inlined in production (no render-blocking request) and
+  linked with a sourcemap in development for easy debugging.
+- partials/head/custom.html is a user extension hook (optional).
+
+@context {page} page The current page.
+*/}}
+
+{{- /* No-flash color theme: resolve before CSS paints to avoid a white/dark flash. */ -}}
+<script>
+  (function () {
+    var d = document.documentElement;
+    var t;
+    try { t = localStorage.getItem('rf-theme'); } catch (e) {}
+    if (t !== 'light' && t !== 'dark') {
+      t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    d.setAttribute('data-theme', t);
+  })();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s · %s" .Title site.Title }}{{ end }}</title>
+
+{{- partial "head/seo.html" . }}
+{{- partial "head/og.html" . }}
+{{- partial "head/jsonld.html" . }}
+
+{{- partialCached "head/css.html" . }}
+{{- partial "head/js.html" . }}
+
+{{- /* User extension hook: create layouts/partials/head/custom.html to inject more. */ -}}
+{{- if templates.Exists "partials/head/custom.html" }}
+  {{- partial "head/custom.html" . }}
+{{- end }}

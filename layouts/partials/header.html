@@ -1,0 +1,46 @@
+{{- /*
+header.html — site banner + primary navigation.
+
+Renders the site title as a link on inner pages and as plain text on home,
+then delegates the menu to menu.html. A dark-mode toggle button is included
+here (wired by a tiny inline script) so the reading experience can switch
+palettes without a page reload; the actual theme is applied before paint by
+the no-flash script in head.html.
+
+@context {page} page The current page.
+*/}}
+
+<div class="site-brand">
+  {{- if .IsHome }}
+    <h1 class="site-title">{{ site.Title }}</h1>
+  {{- else }}
+    <p class="site-title"><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></p>
+  {{- end }}
+</div>
+
+{{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+
+<button class="theme-toggle" type="button"
+        aria-label="{{ i18n "toggleTheme" }}"
+        data-theme-light="{{ i18n `themeLight` }}"
+        data-theme-dark="{{ i18n `themeDark` }}">
+  <span class="theme-toggle-icon" aria-hidden="true"></span>
+</button>
+
+<script>
+  (function () {
+    var btn = document.querySelector('.theme-toggle');
+    if (!btn) return;
+    var d = document.documentElement;
+    function label() {
+      btn.setAttribute('aria-pressed', d.getAttribute('data-theme') === 'dark');
+    }
+    label();
+    btn.addEventListener('click', function () {
+      var next = d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      d.setAttribute('data-theme', next);
+      try { localStorage.setItem('rf-theme', next); } catch (e) {}
+      label();
+    });
+  })();
+</script>
