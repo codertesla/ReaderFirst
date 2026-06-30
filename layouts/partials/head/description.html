@@ -1,0 +1,21 @@
+{{- /*
+head/description.html — resolve the description for the current page.
+
+Kind-aware precedence so an article never inherits the site's tagline as its
+own description (which would be wrong for SEO/OG/JSON-LD):
+- Page (article):  page Description  → auto Summary  → (site tagline)
+- List/home/etc.:  page Description  → site tagline
+
+Returned value is plainified so no HTML leaks into meta/JSON payloads.
+
+@context {page} page The current page.
+@returns {string} The resolved, plainified description.
+*/}}
+
+{{- $desc := "" }}
+{{- if .IsPage }}
+  {{- $desc = .Description | default (plainify .Summary) | default site.Params.description }}
+{{- else }}
+  {{- $desc = .Description | default site.Params.description }}
+{{- end }}
+{{- return ($desc | plainify) }}

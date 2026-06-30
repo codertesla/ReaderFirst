@@ -9,3 +9,55 @@ other = "文章"
 
 [tags]
 other = "标签"
+
+[toggleTheme]
+other = "切换主题配色"
+
+[themeLight]
+other = "浅色"
+
+[themeDark]
+other = "深色"
+
+[allRightsReserved]
+other = "保留所有权利"
+
+[publishedOn]
+other = "发布于"
+
+[updatedOn]
+other = "更新于"
+
+[minRead]
+other = "分钟阅读"
+
+[tagsLabel]
+other = "标签"
+
+[postNav]
+other = "文章导航"
+
+[recentPosts]
+other = "最新文章"
+
+[allPosts]
+other = "全部文章"
+
+[postCount]
+one = "{{ . }} 篇文章"
+other = "{{ . }} 篇文章"
+
+[noTerms]
+other = "暂无标签。"
+
+[noPosts]
+other = "暂无文章。"
+
+[notFound]
+other = "页面未找到"
+
+[notFoundDesc]
+other = "你访问的页面不存在或可能已被移动。"
+
+[goHome]
+other = "返回首页"

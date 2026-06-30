@@ -11,7 +11,7 @@ Relative paths are made absolute so social crawlers can fetch them.
 */}}
 
 {{- $title := .Title | default site.Title }}
-{{- $desc := .Description | default site.Params.description | default (plainify .Summary) | plainify }}
+{{- $desc := partial "head/description.html" . }}
 
 {{- $img := "" }}
 {{- with .Resources.GetMatch "cover.*" }}

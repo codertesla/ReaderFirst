@@ -12,7 +12,7 @@ All values are plainified so no stray HTML leaks into the JSON payload.
 */}}
 
 {{- $title := .Title | default site.Title }}
-{{- $desc := .Description | default site.Params.description | default (plainify .Summary) | plainify }}
+{{- $desc := partial "head/description.html" . }}
 {{- $author := .Params.author | default site.Params.author | default site.Params.creator | default site.Title }}
 {{- $logo := or site.Params.logo site.Params.default_og_image }}
 

@@ -1,0 +1,36 @@
+{{- /*
+taxonomy.html — overview of all terms in a taxonomy (e.g. /tags/).
+
+Semantic <ul class="term-list">: each term links to its term page and shows
+the number of posts assigned, using the pluralized postCount i18n entry.
+Term pages are sorted by descending post count, then alphabetically.
+
+@context {page} page The taxonomy overview page.
+*/}}
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+
+  {{- with .Content }}
+  <div class="taxonomy-content">
+    {{ . }}
+  </div>
+  {{- end }}
+
+  {{- $terms := where .Pages "Title" "ne" "" }}
+  {{- $terms = sort $terms "Pages.Len" "desc" }}
+  {{- with $terms }}
+  <ul class="term-list">
+    {{- range . }}
+      {{- $count := .Pages.Len }}
+    <li class="term-item">
+      <a class="term-link" href="{{ .RelPermalink }}">
+        <span class="term-name">{{ .LinkTitle }}</span>
+        <span class="term-count" aria-label="{{ i18n "postCount" $count }}">{{ $count }}</span>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+  {{- else }}
+  <p class="empty-state">{{ i18n "noTerms" }}</p>
+  {{- end }}
+{{ end }}

@@ -1,0 +1,19 @@
+{{- /*
+404.html — not-found page.
+
+Rendered for unknown URLs (and site.Params.pagenate / broken links). The
+SEO partial already emits noindex for Kind "404". Kept lightweight: a
+short message, a search prompt, and a link back home.
+
+@context {page} page The 404 page.
+*/}}
+{{ define "main" }}
+  <section class="error-page" aria-label="{{ i18n "notFound" }}">
+    <p class="error-code" aria-hidden="true">404</p>
+    <h1 class="error-title">{{ i18n "notFound" }}</h1>
+    <p class="error-text">{{ i18n "notFoundDesc" }}</p>
+    <p class="error-actions">
+      <a href="{{ site.Home.RelPermalink }}">{{ i18n "goHome" }}</a>
+    </p>
+  </section>
+{{ end }}
