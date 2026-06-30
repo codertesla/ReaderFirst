@@ -1,6 +1,17 @@
 baseURL = 'https://example.org/'
 locale = 'en-US'
-title = 'My New Hugo Project'
+title = 'ReaderFirst'
+
+[params]
+description = 'A minimalist, reading-first Hugo theme optimized for humans and AI agents.'
+author = 'ReaderFirst'
+# logo = 'images/logo.png'              # uncomment to populate publisher.logo in JSON-LD
+# default_og_image = 'images/og.png'    # uncomment for a fallback social share image
+# twitter = '@readerfirst'              # uncomment for twitter:site
+
+[taxonomies]
+tag = 'tags'
+category = 'categories'
 
 [menus]
   [[menus.main]]

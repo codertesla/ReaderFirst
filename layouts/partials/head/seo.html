@@ -7,7 +7,7 @@ Robots: noindex for drafts and the 404, index/follow otherwise.
 @context {page} page The current page.
 */}}
 
-{{- $desc := .Description | default site.Params.description | default (plainify .Summary) | plainify }}
+{{- $desc := partial "head/description.html" . }}
 <meta name="description" content="{{ $desc | truncate 160 }}">
 
 {{- with or .Params.author site.Params.author site.Params.creator }}
@@ -28,6 +28,14 @@ Robots: noindex for drafts and the 404, index/follow otherwise.
 <meta name="generator" content="Hugo {{ hugo.Version }}">
 
 <link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* Favicon: only emit when one is present in static/. Browsers pick the best of multiple. */ -}}
+{{- $favicons := dict "favicon.svg" "image/svg+xml" "favicon.png" "image/png" "favicon.ico" "image/x-icon" }}
+{{- range $file, $type := $favicons }}
+  {{- if fileExists (printf "static/%s" $file) }}
+<link rel="icon" type="{{ $type }}" href="{{ $file | relURL }}">
+  {{- end }}
+{{- end }}
 
 {{- with .OutputFormats.Get "RSS" }}
 <link rel="alternate" type="application/rss+xml" title="{{ site.Title }} · RSS" href="{{ .RelPermalink }}">

@@ -9,3 +9,55 @@ other = "Posts"
 
 [tags]
 other = "Tags"
+
+[toggleTheme]
+other = "Toggle color theme"
+
+[themeLight]
+other = "Light"
+
+[themeDark]
+other = "Dark"
+
+[allRightsReserved]
+other = "All rights reserved"
+
+[publishedOn]
+other = "Published"
+
+[updatedOn]
+other = "Updated"
+
+[minRead]
+other = "min read"
+
+[tagsLabel]
+other = "Tags"
+
+[postNav]
+other = "Post navigation"
+
+[recentPosts]
+other = "Recent posts"
+
+[allPosts]
+other = "All posts"
+
+[postCount]
+one = "{{ . }} post"
+other = "{{ . }} posts"
+
+[noTerms]
+other = "No terms yet."
+
+[noPosts]
+other = "No posts yet."
+
+[notFound]
+other = "Page not found"
+
+[notFoundDesc]
+other = "The page you are looking for does not exist or may have moved."
+
+[goHome]
+other = "Back to home"

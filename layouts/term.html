@@ -1,0 +1,34 @@
+{{- /*
+term.html — all pages assigned a term (e.g. /tags/red/).
+
+Page-intro content first, then a semantic .post-list of the term's pages
+with date, title link and summary. Mirrors section.html so term pages,
+sections and the home page share one consistent list pattern.
+
+@context {page} page The term page.
+*/}}
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+
+  {{- with .Content }}
+  <div class="term-content">
+    {{ . }}
+  </div>
+  {{- end }}
+
+  {{- with .Pages }}
+  <ul class="post-list">
+    {{- range . }}
+      {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+      {{- $dateHuman := .Date | time.Format ":date_long" }}
+    <li>
+      <time class="post-date" datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+      <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
+      {{ .Summary }}
+    </li>
+    {{- end }}
+  </ul>
+  {{- else }}
+  <p class="empty-state">{{ i18n "noPosts" }}</p>
+  {{- end }}
+{{ end }}

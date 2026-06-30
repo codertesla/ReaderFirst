@@ -1,0 +1,65 @@
+{{- /*
+single.html — single post view.
+
+Semantic <article> with an <header> (title + meta) and the rendered content,
+followed by the tags nav. Meta is machine-readable via <time datetime>, and
+reading time is derived from WordCount (≈200 wpm). Stays in sync with the
+.entry-header / .entry-meta / .entry-tags styles in main.css.
+
+@context {page} page The current post.
+*/}}
+{{ define "main" }}
+  {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+  {{- $dateHuman := .Date | time.Format ":date_long" }}
+  {{- $words := .WordCount }}
+  {{- $minutes := math.Add (div $words 200) 1 }}
+  {{- $modMachine := .Lastmod | time.Format "2006-01-02T15:04:05-07:00" }}
+  {{- $modHuman := .Lastmod | time.Format ":date_long" }}
+  {{- $isUpdated := and .Lastmod (ne (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02")) }}
+
+  <article class="entry">
+    <header class="entry-header">
+      <h1 class="entry-title">{{ .Title }}</h1>
+      <div class="entry-meta">
+        <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+        {{- with .Params.author }}
+        <span class="entry-author">{{ i18n "publishedOn" }} {{ . }}</span>
+        {{- end }}
+        {{- if $isUpdated }}
+        <span class="entry-updated">{{ i18n "updatedOn" }} <time datetime="{{ $modMachine }}">{{ $modHuman }}</time></span>
+        {{- end }}
+        <span class="entry-reading">{{ $minutes }} {{ i18n "minRead" }}</span>
+      </div>
+    </header>
+
+    <div class="entry-content">
+      {{ .Content }}
+    </div>
+
+    {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+
+    {{- /* Prev/next within the same section, by date. rel=prev/next aids crawling. */ -}}
+    {{- $newer := .NextInSection }}
+    {{- $older := .PrevInSection }}
+    {{- if or $newer $older }}
+    <nav class="post-nav" aria-label="{{ i18n "postNav" }}">
+      <div class="post-nav-cell post-nav-prev">
+        {{- with $older }}
+        <a href="{{ .RelPermalink }}" rel="prev">
+          <span class="post-nav-dir" aria-hidden="true">&larr;</span>
+          <span class="post-nav-title">{{ .LinkTitle }}</span>
+        </a>
+        {{- end }}
+      </div>
+      <div class="post-nav-cell post-nav-next">
+        {{- with $newer }}
+        <a href="{{ .RelPermalink }}" rel="next">
+          <span class="post-nav-title">{{ .LinkTitle }}</span>
+          <span class="post-nav-dir" aria-hidden="true">&rarr;</span>
+        </a>
+        {{- end }}
+      </div>
+    </nav>
+    {{- end }}
+  </article>
+{{ end }}
