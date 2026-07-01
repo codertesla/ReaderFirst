@@ -23,7 +23,7 @@ Add ReaderFirst to your existing Hugo site as a submodule so it stays easy to up
 
 ```bash
 cd your-site
-git submodule add https://github.com/sos/hugo-theme-reader-first.git themes/ReaderFirst
+git submodule add https://github.com/codertesla/ReaderFirst.git themes/ReaderFirst
 git submodule update --init --recursive
 ```
 
@@ -45,7 +45,7 @@ If you prefer not to use submodules:
 
 ```bash
 cd your-site
-git clone https://github.com/sos/hugo-theme-reader-first.git themes/ReaderFirst
+git clone https://github.com/codertesla/ReaderFirst.git themes/ReaderFirst
 ```
 
 ## Basic Configuration
