@@ -1,16 +1,17 @@
 {{- /*
-section.html — list of pages in a section (e.g. /posts/).
+list.html — generic list page fallback (kinds without a dedicated template).
 
-Page-intro content first, then a semantic .post-list of the section's
-pages with date, title link and summary.
+Page-intro content first, then a semantic .post-list of the paginated pages
+(date, title link, summary) and the shared monospace pager. Uses .Paginator
+which respects the top-level `paginate` setting in hugo.toml.
 
-@context {page} page The section page.
+@context {page} page The list page.
 */}}
 {{ define "main" }}
   <h1>{{ .Title }}</h1>
 
   {{- with .Content }}
-  <div class="section-content">
+  <div class="list-content">
     {{ . }}
   </div>
   {{- end }}

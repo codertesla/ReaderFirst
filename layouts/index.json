@@ -1,0 +1,38 @@
+{{- /*
+index.json — JSON Feed 1.1 (https://jsonfeed.org/version/1.1).
+
+AI/crawler-friendly, machine-readable feed of the site's posts. Emitted at
+/index.json because hugo.toml sets home outputs = ["HTML", "RSS", "JSON"].
+Each item carries id, url, title, content_html (full rendered post) and
+date_published, plus tags and a summary where available.
+
+@context {page} page The home page.
+*/}}
+{{- /* Note: we range directly (no .Paginate) so the feed exports the full
+   post list AND avoids a duplicate .Paginate call on the home page, which
+   would prevent the HTML paginator from generating its /page/N/ variants. */ -}}
+{{- $posts := where site.RegularPages "Type" "posts" }}
+{{- $items := slice }}
+{{- range $posts }}
+  {{- $items = $items | append (dict
+      "id"            .Permalink
+      "url"           .Permalink
+      "title"         (.Title | plainify)
+      "content_html"  (.Content | string)
+      "summary"       ((partial "head/description.html" .) | truncate 300)
+      "date_published" (.Date.Format "2006-01-02T15:04:05Z07:00")
+      "date_modified"  (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+      "tags"          (.Params.tags | default slice)
+    ) }}
+{{- end }}
+{{- $feed := dict
+    "version"       "https://jsonfeed.org/version/1.1"
+    "title"         (site.Title | plainify)
+    "home_page_url" site.BaseURL
+    "feed_url"      (.OutputFormats.Get "JSON").Permalink
+    "description"   (site.Params.description | default "")
+    "authors"       (slice (dict "name" ((site.Params.author | default site.Title) | plainify)))
+    "language"      site.Language.Lang
+    "items"         $items
+  }}
+{{- $feed | jsonify (dict "indent" "  ") | safeHTML }}

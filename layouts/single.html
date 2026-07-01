@@ -32,6 +32,16 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
       </div>
     </header>
 
+    {{- /* Collapsible TOC: only when front matter opts in and headings exist. */ -}}
+    {{- if .Params.toc }}
+      {{- with .TableOfContents }}
+    <details class="post-toc">
+      <summary>Outline</summary>
+      {{ . }}
+    </details>
+      {{- end }}
+    {{- end }}
+
     <div class="entry-content">
       {{ .Content }}
     </div>
@@ -62,4 +72,39 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
     </nav>
     {{- end }}
   </article>
+
+  {{- /* Copy button for code blocks — vanilla, no dependencies. */ -}}
+  <script>
+    (function () {
+      var blocks = document.querySelectorAll('.entry-content pre');
+      if (!blocks.length) return;
+      blocks.forEach(function (block) {
+        var code = block.querySelector('code');
+        var text = code ? code.innerText : block.innerText;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy';
+        btn.textContent = 'Copy';
+        btn.setAttribute('aria-label', 'Copy code to clipboard');
+        function done() {
+          btn.textContent = 'Copied';
+          btn.classList.add('copied');
+          setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+        }
+        function fallback() {
+          var ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.focus(); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+        btn.addEventListener('click', function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(fallback);
+          } else { fallback(); }
+        });
+        block.appendChild(btn);
+      });
+    })();
+  </script>
 {{ end }}

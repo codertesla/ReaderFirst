@@ -13,8 +13,7 @@ author = 'ReaderFirst'
 tag = 'tags'
 category = 'categories'
 
-[pagination]
-pageSize = 10
+paginate = 10
 
 [markup]
   [markup.highlight]
