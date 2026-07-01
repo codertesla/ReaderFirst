@@ -20,7 +20,7 @@ Reading-first + AI-friendly:
 <body>
   <a class="skip-link" href="#main">{{ i18n "skipToContent" }}</a>
 
-  <header class="site-header">
+  <header class="site-header" data-nosnippet>
     {{ partial "header.html" . }}
   </header>
 
@@ -28,7 +28,7 @@ Reading-first + AI-friendly:
     {{ block "main" . }}{{ end }}
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" data-nosnippet>
     {{ partial "footer.html" . }}
   </footer>
 </body>
