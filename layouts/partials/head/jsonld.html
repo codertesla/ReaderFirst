@@ -3,8 +3,8 @@ head/jsonld.html — Schema.org structured data (AI / crawler friendly).
 
 - Single pages (BlogPosting): headline, dates, author, publisher, image,
   keywords, license, mainEntityOfPage.
-- List pages (home, sections, taxonomies): a WebSite node with a
-  SearchAction potential action so AI agents can discover site search.
+- List pages (home, sections, taxonomies): a WebSite node describing the
+  site (name, url, description, language, publisher).
 
 All values are plainified so no stray HTML leaks into the JSON payload.
 
@@ -68,11 +68,6 @@ All values are plainified so no stray HTML leaks into the JSON payload.
     "url" site.BaseURL
     "description" ($desc | truncate 300)
     "inLanguage" site.Language.Lang
-    "potentialAction" (dict
-      "@type" "SearchAction"
-      "target" (printf "%s/search?q={search_term_string}" (strings.TrimSuffix "/" site.BaseURL))
-      "query-input" "required name=search_term_string"
-    )
   }}
   {{- with $absLogo }}
     {{- $logoObj := dict "@type" "ImageObject" "url" . }}

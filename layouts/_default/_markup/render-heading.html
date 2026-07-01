@@ -1,0 +1,14 @@
+{{- /*
+render-heading.html — content headings with a stable id + hover permalink.
+
+Every heading in post content gets Hugo's auto anchor as its id and a small
+"#" link (revealed on hover/focus) so readers can deep-link to any section.
+Pure HTML/CSS — no JavaScript. The article <h1> lives in single.html and is
+not affected by this content-only hook.
+
+@context {heading} . The heading render-hook context.
+*/}}
+<h{{ .Level }} id="{{ .Anchor }}">
+  {{- .Text -}}
+  <a class="heading-anchor" href="#{{ .Anchor }}" aria-label="{{ i18n "anchorLabel" }}">#</a>
+</h{{ .Level }}>

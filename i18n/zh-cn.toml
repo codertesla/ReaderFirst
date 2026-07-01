@@ -37,6 +37,12 @@ other = "标签"
 [postNav]
 other = "文章导航"
 
+[anchorLabel]
+other = "链接到本节"
+
+[relatedPosts]
+other = "相关文章"
+
 [pagination]
 other = "分页"
 

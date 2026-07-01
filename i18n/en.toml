@@ -37,6 +37,12 @@ other = "Tags"
 [postNav]
 other = "Post navigation"
 
+[anchorLabel]
+other = "Link to this section"
+
+[relatedPosts]
+other = "Related posts"
+
 [pagination]
 other = "Pagination"
 

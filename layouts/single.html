@@ -48,6 +48,24 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
 
     {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
 
+    {{- /* Related posts: server-side (keyword/tag relevance), zero JS. */ -}}
+    {{- $related := first 3 (where (site.RegularPages.Related .) "Type" "posts") }}
+    {{- with $related }}
+    <nav class="related" aria-label="{{ i18n "relatedPosts" }}" data-nosnippet>
+      <h2 class="related-title">{{ i18n "relatedPosts" }}</h2>
+      <ul class="related-list">
+        {{- range . }}
+        <li>
+          <a href="{{ .RelPermalink }}">
+            <span class="related-post-title">{{ .LinkTitle }}</span>
+            <time class="related-post-date" datetime="{{ .Date | time.Format "2006-01-02T15:04:05-07:00" }}">{{ .Date | time.Format ":date_long" }}</time>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
+    </nav>
+    {{- end }}
+
     {{- /* Prev/next within the same section, by date. rel=prev/next aids crawling. */ -}}
     {{- $newer := .NextInSection }}
     {{- $older := .PrevInSection }}
