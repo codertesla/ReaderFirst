@@ -120,8 +120,7 @@ Hugo Themes requires two preview images in the `images/` folder at the repositor
 - `images/screenshot.png` — 1500×1000 (3:2) full-screen capture of the theme.
 - `images/tn.png` — 900×600 (3:2) thumbnail used in the themes gallery.
 
-The repository ships SVG placeholder stand-ins (`images/screenshot.svg`, `images/tn.svg`). **Replace them with real `.png` exports at the dimensions above before submitting to the Hugo Themes directory.**
-
+These images are located in the `images/` folder and will be used automatically by the Hugo Themes gallery.
 ## License
 
 ReaderFirst is released under the [MIT License](LICENSE).
