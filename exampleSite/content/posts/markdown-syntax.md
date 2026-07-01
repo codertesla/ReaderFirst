@@ -4,6 +4,7 @@ date = 2026-06-30T12:00:00Z
 draft = false
 toc = true
 tags = ['syntax', 'markdown', 'test']
+categories = ['guides']
 +++
 
 A complete reference of Markdown elements rendered by the **ReaderFirst** theme. Use this page to verify typography, spacing, color contrast in both light and dark modes, and that the table of contents (TOC) on the right tracks every heading below.

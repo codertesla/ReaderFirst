@@ -13,6 +13,9 @@ other = "Posts"
 [tags]
 other = "Tags"
 
+[categories]
+other = "Categories"
+
 [toggleTheme]
 other = "Toggle color theme"
 

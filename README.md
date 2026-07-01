@@ -2,6 +2,8 @@
 
 A minimalist, reading-first Hugo theme optimized for both humans and AI agents.
 
+![ReaderFirst screenshot](https://raw.githubusercontent.com/codertesla/ReaderFirst/main/images/screenshot.png)
+
 ReaderFirst strips away every decoration that gets between the reader and the text. It ships with a clean typographic system, an automatic dark mode that follows the OS, an optional collapsible table of contents for long posts, and structured data (JSON-LD + JSON Feed) so your content is easy for both search engines and AI assistants to consume.
 
 ## Features
@@ -17,9 +19,42 @@ ReaderFirst strips away every decoration that gets between the reader and the te
 
 ## Installation
 
-### As a Git Submodule (recommended)
+### As a Hugo Module (recommended)
 
-Add ReaderFirst to your existing Hugo site as a submodule so it stays easy to update:
+Initialize modules in your site, then import ReaderFirst:
+
+```bash
+cd your-site
+hugo mod init github.com/yourname/yoursite
+```
+
+Add to your site's `hugo.toml`:
+
+```toml
+theme = 'github.com/codertesla/ReaderFirst'
+
+[module]
+  [[module.imports]]
+    path = 'github.com/codertesla/ReaderFirst'
+```
+
+Fetch the theme:
+
+```bash
+hugo mod get github.com/codertesla/ReaderFirst@v0.1.0
+hugo mod tidy
+```
+
+To update later:
+
+```bash
+hugo mod get -u github.com/codertesla/ReaderFirst
+hugo mod tidy
+```
+
+### As a Git Submodule
+
+Add ReaderFirst to your existing Hugo site as a submodule:
 
 ```bash
 cd your-site
@@ -41,7 +76,7 @@ git submodule update --remote themes/ReaderFirst
 
 ### As a direct clone
 
-If you prefer not to use submodules:
+If you prefer not to use modules or submodules:
 
 ```bash
 cd your-site
@@ -54,13 +89,17 @@ A minimal `hugo.toml` for a site using ReaderFirst:
 
 ```toml
 baseURL = 'https://example.com/'
-languageCode = 'en-us'
 title = 'My Site'
-theme = 'ReaderFirst'
+theme = 'github.com/codertesla/ReaderFirst'
+
+[module]
+  [[module.imports]]
+    path = 'github.com/codertesla/ReaderFirst'
 
 [params]
   description = 'A minimalist, reading-first blog.'
   author = 'Your Name'
+  mainSections = ['posts']
 
 [taxonomies]
   tag = 'tags'
@@ -141,10 +180,11 @@ The `exampleSite/` directory contains a ready-to-run demo. From the theme reposi
 
 ```bash
 cd exampleSite
+hugo mod tidy
 hugo server
 ```
 
-It uses `themesDir = "../.."` so it loads the theme directly from the parent folder without installing anything.
+It imports the theme via Hugo Modules (`go.mod` uses a local `replace` so no GitHub fetch is needed during development).
 
 ## Theme Preview Images
 
