@@ -22,8 +22,16 @@
   --link:      #1a3a8a;
   --link-hover:#0a2a6a;
   --accent:    #1a3a8a;
-  --code-bg:   #efeff3;
+  --code-bg:   #f1efea;
   --selection: #cfe0ff;
+
+  /* Chroma syntax-highlight tokens (used with noClasses=false) */
+  --tok-kw:   #a13b6a;
+  --tok-str:  #1a7a4c;
+  --tok-com:  #71717e;
+  --tok-num:  #b3541b;
+  --tok-fn:   #1a3a8a;
+  --tok-type: #8a5a1a;
 
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -58,6 +66,13 @@
   --accent:    #8db4ff;
   --code-bg:   #20202a;
   --selection: #1f3a66;
+
+  --tok-kw:   #ff7eb6;
+  --tok-str:  #98c379;
+  --tok-com:  #6b6b78;
+  --tok-num:  #e5c07b;
+  --tok-fn:   #61afef;
+  --tok-type: #e5c07b;
 }
 
 /* --- Reset --------------------------------------------------------------- */
@@ -384,14 +399,47 @@ code, pre, kbd, samp { font-family: var(--font-mono); font-size: 0.95em; }
   border-radius: 3px;
 }
 pre {
+  position: relative;
   margin: 0 0 var(--s-4);
   padding: var(--s-4);
+  padding-top: var(--s-5);
   background: var(--code-bg);
   border-radius: var(--radius);
   overflow-x: auto;
   max-width: none;
 }
 pre code { padding: 0; background: none; }
+
+/* --- Chroma token colors (class-based, theme-aware) ---------------------- */
+.chroma :is(.k,.kc,.kd,.kn,.kp,.kr,.kt,.o,.ow) { color: var(--tok-kw); }
+.chroma :is(.s,.s1,.s2,.sa,.sb,.sc,.sd,.se,.sh,.si,.sr,.sx) { color: var(--tok-str); }
+.chroma :is(.c,.c1,.cm,.cs,.cp) { color: var(--tok-com); font-style: italic; }
+.chroma :is(.m,.mf,.mh,.mi,.mo,.il) { color: var(--tok-num); }
+.chroma :is(.nf,.fm,.nd,.nl,.nn,.nt,.nv,.vc,.vg,.vi,.bp) { color: var(--tok-fn); }
+.chroma :is(.kt,.nc) { color: var(--tok-type); }
+
+/* --- Copy button --------------------------------------------------------- */
+.code-copy {
+  position: absolute;
+  top: var(--s-2);
+  right: var(--s-2);
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: all 0.25s ease;
+}
+pre:hover .code-copy { opacity: 1; }
+.code-copy:hover, .code-copy.copied {
+  color: var(--link);
+  border-color: var(--accent);
+}
 
 /* --- Tables -------------------------------------------------------------- */
 .site-main table {
@@ -405,6 +453,47 @@ th, td { padding: var(--s-2) var(--s-3); border: 1px solid var(--border); text-a
 th { background: var(--bg-soft); }
 
 hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
+
+/* --- Table of contents --------------------------------------------------- */
+.post-toc {
+  margin: 0 0 var(--s-5);
+  padding: var(--s-3) var(--s-4);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  font-size: var(--fs-small);
+}
+.post-toc > summary {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  color: var(--fg-muted);
+  letter-spacing: 0.02em;
+}
+.post-toc[open] > summary { margin-bottom: var(--s-3); }
+.post-toc ul { margin: 0; padding-left: var(--s-4); list-style: none; }
+.post-toc ul ul { padding-left: var(--s-4); }
+.post-toc a { color: var(--fg-muted); text-decoration: none; }
+.post-toc a:hover { color: var(--link); }
+
+/* --- Pagination ---------------------------------------------------------- */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+  padding-top: var(--s-4);
+  border-top: 1px dashed var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  max-width: none;
+}
+.pagination a { color: var(--fg); text-decoration: none; }
+.pagination a:hover { color: var(--link); }
+.page-disabled { color: var(--fg-muted); opacity: 0.4; }
+.page-num { color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.page-next { margin-left: auto; }
 
 /* --- Reduced motion ------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {

@@ -37,6 +37,18 @@ other = "Tags"
 [postNav]
 other = "Post navigation"
 
+[pagination]
+other = "Pagination"
+
+[older]
+other = "Older"
+
+[newer]
+other = "Newer"
+
+[pageOf]
+other = "Page {{ .PageNumber }} of {{ .TotalPages }}"
+
 [recentPosts]
 other = "Recent posts"
 

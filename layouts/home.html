@@ -14,8 +14,8 @@ Renders the home page's own content (if any) followed by a semantic
   </div>
   {{- end }}
 
-  {{- $pages := where site.RegularPages "Type" "posts" }}
-  {{- with $pages }}
+  {{- $paginator := .Paginator }}
+  {{- with $paginator.Pages }}
   <section class="post-list-section" aria-label="{{ i18n "recentPosts" }}">
     <h2 class="post-list-title">{{ i18n "recentPosts" }}</h2>
     <ul class="post-list">
@@ -31,4 +31,6 @@ Renders the home page's own content (if any) followed by a semantic
     </ul>
   </section>
   {{- end }}
+
+  {{ partial "pagination.html" . }}
 {{ end }}

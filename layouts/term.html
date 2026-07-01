@@ -16,7 +16,7 @@ sections and the home page share one consistent list pattern.
   </div>
   {{- end }}
 
-  {{- with .Pages }}
+  {{- with .Paginator.Pages }}
   <ul class="post-list">
     {{- range . }}
       {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
@@ -31,4 +31,6 @@ sections and the home page share one consistent list pattern.
   {{- else }}
   <p class="empty-state">{{ i18n "noPosts" }}</p>
   {{- end }}
+
+  {{ partial "pagination.html" . }}
 {{ end }}

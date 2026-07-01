@@ -37,6 +37,18 @@ other = "标签"
 [postNav]
 other = "文章导航"
 
+[pagination]
+other = "分页"
+
+[older]
+other = "更早"
+
+[newer]
+other = "更新"
+
+[pageOf]
+other = "第 {{ .PageNumber }} / {{ .TotalPages }} 页"
+
 [recentPosts]
 other = "最新文章"
 

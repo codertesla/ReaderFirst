@@ -29,12 +29,15 @@ Robots: noindex for drafts and the 404, index/follow otherwise.
 
 <link rel="canonical" href="{{ .Permalink }}">
 
-{{- /* Favicon: only emit when one is present in static/. Browsers pick the best of multiple. */ -}}
-{{- $favicons := dict "favicon.svg" "image/svg+xml" "favicon.png" "image/png" "favicon.ico" "image/x-icon" }}
-{{- range $file, $type := $favicons }}
-  {{- if fileExists (printf "static/%s" $file) }}
-<link rel="icon" type="{{ $type }}" href="{{ $file | relURL }}">
-  {{- end }}
+{{- /* Favicon: SVG first for modern browsers (with dark-mode support), PNG next, ICO as fallback (with sizes="any" to avoid overriding SVG). */ -}}
+{{- if fileExists "static/favicon.svg" }}
+<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+{{- end }}
+{{- if fileExists "static/favicon.png" }}
+<link rel="icon" href="{{ "favicon.png" | relURL }}" type="image/png">
+{{- end }}
+{{- if fileExists "static/favicon.ico" }}
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" type="image/x-icon" sizes="any">
 {{- end }}
 
 {{- with .OutputFormats.Get "RSS" }}

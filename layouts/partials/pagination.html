@@ -1,0 +1,29 @@
+{{- /*
+pagination.html — minimal monospace prev/next pager.
+
+Renders only when there is more than one page. Older posts sit on the left
+(Paginator.Prev = lower page number = older), newer on the right. Disabled
+ends are shown as inert text so the nav shape stays stable.
+
+@context {page} page The current list page (must expose .Paginator).
+*/}}
+{{- $p := .Paginator }}
+{{- if gt $p.TotalPages 1 }}
+<nav class="pagination" aria-label="{{ i18n "pagination" }}">
+  <span class="page-prev">
+    {{- with $p.Prev }}
+    <a href="{{ .URL }}" rel="prev">&larr; {{ i18n "older" }}</a>
+    {{- else }}
+    <span class="page-disabled" aria-disabled="true">&larr; {{ i18n "older" }}</span>
+    {{- end }}
+  </span>
+  <span class="page-num">{{ i18n "pageOf" (dict "PageNumber" $p.PageNumber "TotalPages" $p.TotalPages) }}</span>
+  <span class="page-next">
+    {{- with $p.Next }}
+    <a href="{{ .URL }}" rel="next">{{ i18n "newer" }} &rarr;</a>
+    {{- else }}
+    <span class="page-disabled" aria-disabled="true">{{ i18n "newer" }} &rarr;</span>
+    {{- end }}
+  </span>
+</nav>
+{{- end }}
