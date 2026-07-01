@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-label="ReaderFirst theme thumbnail placeholder (900x600, 3:2)">
+  <rect width="900" height="600" fill="#f7f7f5"/>
+  <rect x="0" y="0" width="900" height="600" fill="none" stroke="#d7d7d2" stroke-width="3"/>
+  <text x="450" y="280" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#1f1f1f">ReaderFirst</text>
+  <text x="450" y="325" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#555">Thumbnail placeholder · 900 × 600 (3:2)</text>
+  <text x="450" y="365" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#888">Replace with tn.png before submitting to Hugo Themes</text>
+</svg>
