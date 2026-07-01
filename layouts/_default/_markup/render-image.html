@@ -1,6 +1,20 @@
+{{- /*
+render-image.html — figure/figcaption with lazy loading and, when the image
+is a page-bundle resource, intrinsic width/height to reserve space and avoid
+layout shift (CLS). Reading dimensions works on standard Hugo (no Extended
+edition or image processing required); remote/static images degrade to a
+plain <img>.
+*/}}
+{{- $dest := .Destination -}}
 {{- $alt := .PlainText | safeHTML -}}
+{{- $res := "" -}}
+{{- if and .Page (not (hasPrefix $dest "http")) (not (hasPrefix $dest "/")) -}}
+  {{- with .Page.Resources.GetMatch $dest -}}{{ $res = . }}{{- end -}}
+{{- end -}}
 <figure>
-  <img src="{{ .Destination | safeURL }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }} />
+  <img src="{{ $dest | safeURL }}" alt="{{ $alt }}" loading="lazy" decoding="async"
+    {{- with $res }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}
+    {{- with .Title }} title="{{ . }}"{{ end }} />
   {{- with .Title }}
   <figcaption>{{ . }}</figcaption>
   {{- end }}

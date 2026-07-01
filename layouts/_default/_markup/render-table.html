@@ -1,0 +1,34 @@
+{{- /*
+render-table.html — wrap Markdown tables in a horizontal-scroll container.
+
+Wide tables would otherwise overflow the reading column on narrow screens
+with no scroll affordance. The .table-wrap wrapper (styled in main.css) keeps
+the page from stretching and lets the table scroll on its own. No JavaScript.
+
+@context {table} . The table render-hook context.
+*/}}
+<div class="table-wrap">
+  <table
+    {{- range $k, $v := .Attributes }}
+      {{- if $v }} {{ $k }}="{{ $v }}"{{ end }}
+    {{- end }}>
+    <thead>
+      {{- range .THead }}
+      <tr>
+        {{- range . }}
+        <th{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</th>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </thead>
+    <tbody>
+      {{- range .TBody }}
+      <tr>
+        {{- range . }}
+        <td{{ with .Alignment }} style="text-align: {{ . }}"{{ end }}>{{ .Text }}</td>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </tbody>
+  </table>
+</div>

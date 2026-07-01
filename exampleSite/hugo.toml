@@ -19,6 +19,18 @@ category = 'categories'
 [pagination]
 pageSize = 10
 
+# Powers the server-side "Related posts" block in single.html.
+[related]
+  threshold = 80
+  includeNewer = true
+  toLower = true
+  [[related.indices]]
+    name = 'tags'
+    weight = 100
+  [[related.indices]]
+    name = 'date'
+    weight = 10
+
 [markup]
   [markup.highlight]
     noClasses = false

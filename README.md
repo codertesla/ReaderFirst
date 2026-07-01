@@ -2,14 +2,15 @@
 
 A minimalist, reading-first Hugo theme optimized for both humans and AI agents.
 
-ReaderFirst strips away every decoration that gets between the reader and the text. It ships with a clean typographic system, an automatic dark mode that follows the OS, a floating table of contents for long posts, and structured data (JSON-LD + JSON Feed) so your content is easy for both search engines and AI assistants to consume.
+ReaderFirst strips away every decoration that gets between the reader and the text. It ships with a clean typographic system, an automatic dark mode that follows the OS, an optional collapsible table of contents for long posts, and structured data (JSON-LD + JSON Feed) so your content is easy for both search engines and AI assistants to consume.
 
 ## Features
 
 - **Minimalist** — One reading column, generous whitespace, and a restrained type scale. Nothing competes with the prose.
 - **Adaptive dark mode** — Follows the visitor's `prefers-color-scheme` setting automatically, with no flash of incorrect theme on load.
 - **AI-friendly** — Emits JSON-LD structured data (Article, BlogPosting, publisher) and a JSON Feed alongside the standard HTML and RSS outputs, so AI agents and search engines can parse your site reliably.
-- **Table of contents** — An automatic, scroll-aware TOC is generated from your post headings and pinned beside the article for easy navigation.
+- **Table of contents** — An optional, collapsible outline generated from a post's headings. Opt in per post with `toc = true` in front matter; it renders inline at the top of the article with zero JavaScript.
+- **Heading anchors** — Every content heading gets a stable `id` and a hover-revealed `#` permalink for easy deep-linking, via a Markdown render hook.
 - **JSON Feed** — A `index.json` feed is published at the site root so feed readers and agents have a machine-readable subscription endpoint.
 - **Accessible** — Semantic HTML, sensible heading order, and tested color contrast in both themes.
 - **Fast** — No client-side JavaScript framework, no layout shift, just static HTML and a small CSS payload.

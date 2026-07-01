@@ -261,6 +261,21 @@ time {
   text-decoration-color: var(--link);
 }
 
+/* --- Heading anchors (render-heading hook) ------------------------------- */
+.entry-content :is(h2, h3, h4, h5, h6) { position: relative; }
+.heading-anchor {
+  margin-left: 0.35em;
+  color: var(--fg-muted);
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.entry-content :is(h2, h3, h4, h5, h6):hover .heading-anchor,
+.heading-anchor:focus-visible { opacity: 1; }
+.heading-anchor:hover { color: var(--link); }
+@media (hover: none) { .heading-anchor { opacity: 0.5; } }
+
 .entry-tags ul {
   list-style: none;
   display: flex;
@@ -327,6 +342,33 @@ time {
   white-space: nowrap;
   font-family: var(--font-mono);
   font-size: var(--fs-small);
+}
+
+/* --- Related posts ------------------------------------------------------- */
+.related {
+  margin-top: var(--s-6);
+  padding-top: var(--s-4);
+  border-top: 1px dashed var(--border);
+  max-width: none;
+}
+.related-title { font-size: var(--fs-h3); margin: 0 0 var(--s-3); }
+.related-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
+.related-list a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2);
+  color: var(--fg);
+  text-decoration: none;
+}
+.related-list a:hover .related-post-title { color: var(--link); }
+.related-post-title { font-family: var(--font-mono); font-size: var(--fs-small); }
+.related-post-date {
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
 }
 
 /* --- Updated badge ------------------------------------------------------- */
@@ -454,6 +496,13 @@ pre:hover .code-copy { opacity: 1; }
 }
 
 /* --- Tables -------------------------------------------------------------- */
+/* .table-wrap is emitted by the render-table hook: horizontal scroll on
+   narrow screens so wide tables never stretch the reading column. */
+.table-wrap {
+  max-width: none;
+  margin: 0 0 var(--s-4);
+  overflow-x: auto;
+}
 .site-main table {
   width: 100%;
   max-width: none;
@@ -461,6 +510,7 @@ pre:hover .code-copy { opacity: 1; }
   margin: 0 0 var(--s-4);
   font-size: var(--fs-small);
 }
+.table-wrap table { margin: 0; }
 th, td { padding: var(--s-2) var(--s-3); border: 1px solid var(--border); text-align: left; }
 th { background: var(--bg-soft); }
 
@@ -551,10 +601,14 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
   .theme-toggle,
   .code-copy,
   .entry-tags,
+  .related,
   .post-nav,
   .site-footer {
     display: none !important;
   }
+
+  /* Heading anchors are screen-only affordances */
+  .heading-anchor { display: none !important; }
 
   /* Full-width within the page; drop column centering, keep readable side margins */
   .site-main {
