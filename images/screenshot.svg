@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1000" viewBox="0 0 1500 1000" role="img" aria-label="ReaderFirst theme screenshot placeholder (1500x1000, 3:2)">
+  <rect width="1500" height="1000" fill="#f7f7f5"/>
+  <rect x="0" y="0" width="1500" height="1000" fill="none" stroke="#d7d7d2" stroke-width="4"/>
+  <text x="750" y="470" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="64" font-weight="700" fill="#1f1f1f">ReaderFirst</text>
+  <text x="750" y="540" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" fill="#555">Screenshot placeholder · 1500 × 1000 (3:2)</text>
+  <text x="750" y="600" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#888">Replace with screenshot.png before submitting to Hugo Themes</text>
+</svg>

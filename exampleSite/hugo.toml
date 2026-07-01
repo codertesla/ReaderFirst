@@ -1,4 +1,6 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://example.com/'
+theme = 'ReaderFirst'
+themesDir = '../..'
 locale = 'en-US'
 title = 'ReaderFirst'
 
@@ -13,7 +15,8 @@ author = 'ReaderFirst'
 tag = 'tags'
 category = 'categories'
 
-paginate = 10
+[pagination]
+pageSize = 10
 
 [markup]
   [markup.highlight]

@@ -4,6 +4,10 @@ resources/_gen/
 .hugo_build.lock
 .hugocache/
 
+# Editor / tool backups
+*.bak
+*.bak2
+
 # OS files
 .DS_Store
 Thumbs.db
