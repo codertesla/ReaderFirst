@@ -1,9 +1,20 @@
 baseURL = 'https://example.com/'
-theme = 'ReaderFirst'
-themesDir = '../..'
 title = 'ReaderFirst'
 defaultContentLanguage = 'en'
 enableRobotsTXT = true
+
+# Load the theme as a Hugo Module. The local `replace` in go.mod points at the
+# parent directory so this works without fetching from GitHub during development.
+theme = 'github.com/codertesla/ReaderFirst'
+
+[module]
+  [[module.imports]]
+    path = 'github.com/codertesla/ReaderFirst'
+
+  [module.hugoVersion]
+    extended = false
+    min = '0.158.0'
+
 # Count CJK characters as words so .WordCount / .ReadingTime are accurate for
 # Chinese/Japanese/Korean content (harmless for Latin-only sites).
 hasCJKLanguage = true
@@ -17,6 +28,8 @@ hasCJKLanguage = true
 [params]
 description = 'A minimalist, reading-first Hugo theme optimized for humans and AI agents.'
 author = 'ReaderFirst'
+# Explicit main section for home lists, JSON Feed, and related-post scoping.
+mainSections = ['posts']
 # logo = 'images/logo.png'              # uncomment to populate publisher.logo in JSON-LD
 # default_og_image = 'images/og.png'    # uncomment for a fallback social share image
 # twitter = '@readerfirst'              # uncomment for twitter:site
@@ -58,6 +71,7 @@ home = ['html', 'rss', 'json']
 [menus]
   # `identifier` maps to an i18n key (see i18n/*.toml) so menu labels are
   # translated per language; `name` is the fallback when no translation exists.
+  # `pageRef` resolves against content paths — keep in sync with [params].mainSections.
   [[menus.main]]
     identifier = 'home'
     name = 'Home'
@@ -67,16 +81,17 @@ home = ['html', 'rss', 'json']
   [[menus.main]]
     identifier = 'posts'
     name = 'Posts'
-    pageRef = '/posts'
+    pageRef = '/posts/'
     weight = 20
 
   [[menus.main]]
     identifier = 'tags'
     name = 'Tags'
-    pageRef = '/tags'
+    pageRef = '/tags/'
     weight = 30
 
-[module]
-  [module.hugoVersion]
-    extended = false
-    min = '0.158.0'
+  [[menus.main]]
+    identifier = 'categories'
+    name = 'Categories'
+    pageRef = '/categories/'
+    weight = 40

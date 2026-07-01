@@ -48,8 +48,9 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
 
     {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
 
-    {{- /* Related posts: server-side (keyword/tag relevance), zero JS. */ -}}
-    {{- $related := first 3 (where (site.RegularPages.Related .) "Type" "posts") }}
+    {{- /* Related posts: server-side (keyword/tag relevance), zero JS.
+       .Related respects the site's [related] config; no hard-coded section. */ -}}
+    {{- $related := first 3 (site.RegularPages.Related .) }}
     {{- with $related }}
     <nav class="related" aria-label="{{ i18n "relatedPosts" }}" data-nosnippet>
       <h2 class="related-title">{{ i18n "relatedPosts" }}</h2>

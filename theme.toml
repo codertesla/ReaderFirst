@@ -1,4 +1,6 @@
 name = "ReaderFirst"
+license = "MIT"
+licenselink = "https://github.com/codertesla/ReaderFirst/blob/main/LICENSE"
 description = "A minimalist, reading-first Hugo theme optimized for both humans and AI agents."
 homepage = "https://github.com/codertesla/ReaderFirst"
 tags = ["minimalist", "clean", "responsive", "blog", "reader", "ai-friendly"]

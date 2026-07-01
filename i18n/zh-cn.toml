@@ -13,6 +13,9 @@ other = "文章"
 [tags]
 other = "标签"
 
+[categories]
+other = "分类"
+
 [toggleTheme]
 other = "切换主题配色"
 

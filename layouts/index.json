@@ -11,7 +11,9 @@ date_published, plus tags and a summary where available.
 {{- /* Note: we range directly (no .Paginate) so the feed exports the full
    post list AND avoids a duplicate .Paginate call on the home page, which
    would prevent the HTML paginator from generating its /page/N/ variants. */ -}}
-{{- $posts := where site.RegularPages "Type" "posts" }}
+{{- /* Use mainSections (auto-detected, or set via params.mainSections) rather
+   than a hard-coded section name, so the feed works with any content layout. */ -}}
+{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections }}
 {{- $items := slice }}
 {{- range $posts }}
   {{- $items = $items | append (dict
