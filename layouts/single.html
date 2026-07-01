@@ -52,7 +52,7 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
     {{- $newer := .NextInSection }}
     {{- $older := .PrevInSection }}
     {{- if or $newer $older }}
-    <nav class="post-nav" aria-label="{{ i18n "postNav" }}">
+    <nav class="post-nav" aria-label="{{ i18n "postNav" }}" data-nosnippet>
       <div class="post-nav-cell post-nav-prev">
         {{- with $older }}
         <a href="{{ .RelPermalink }}" rel="prev">

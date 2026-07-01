@@ -3,6 +3,7 @@ theme = 'ReaderFirst'
 themesDir = '../..'
 locale = 'en-US'
 title = 'ReaderFirst'
+enableRobotsTXT = true
 
 [params]
 description = 'A minimalist, reading-first Hugo theme optimized for humans and AI agents.'
