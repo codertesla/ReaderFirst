@@ -26,17 +26,17 @@
   --selection: #cfe0ff;
 
   /* Typography */
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-               "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-               sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-               "Liberation Mono", monospace;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
+               Consolas, "Liberation Mono", monospace;
   --measure:   70ch;          /* ideal reading line length       */
-  --max-width: 760px;         /* content column on large screens */
+  --max-width: 680px;         /* content column on large screens */
   --line-height: 1.75;
 
   --fs-base: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --fs-h1:   clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --fs-h1:   clamp(1.8rem, 1.1rem + 2.6vw, 3rem);
   --fs-h2:   clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem);
   --fs-h3:   clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
   --fs-small: 0.875rem;
@@ -81,7 +81,7 @@ img, picture, svg, video, canvas {
   height: auto;
   display: block;
 }
-a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; transition: all 0.25s ease; }
 a:hover { color: var(--link-hover); }
 a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   outline: 2px solid var(--accent);
@@ -118,8 +118,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--s-3) var(--s-5);
-  padding-block: var(--s-5);
-  border-bottom: 1px solid var(--border);
+  padding-block: var(--s-6);
 }
 .site-main { padding-block: var(--s-6); min-height: 60vh; }
 .site-footer {
@@ -130,7 +129,13 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 }
 
 .site-brand { margin-right: auto; }
-.site-title { margin: 0; font-size: 1.1rem; font-weight: 700; }
+.site-title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
 .site-title a { color: var(--fg); text-decoration: none; }
 
 /* --- Navigation ---------------------------------------------------------- */
@@ -146,6 +151,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   color: var(--fg-muted);
   text-decoration: none;
   padding: var(--s-1) 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
 }
 .site-nav a:hover,
 .site-nav a.active,
@@ -165,8 +172,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   color: var(--fg);
   cursor: pointer;
   font: inherit;
+  transition: all 0.25s ease;
 }
-.theme-toggle svg { display: block; }
+.theme-toggle:hover { border-color: var(--accent); color: var(--link); }
+.theme-toggle svg { display: block; transition: transform 0.35s ease; }
+.theme-toggle:hover svg { transform: rotate(20deg); }
 .theme-toggle .icon-moon { display: none; }
 [data-theme="dark"] .theme-toggle .icon-sun { display: none; }
 [data-theme="dark"] .theme-toggle .icon-moon { display: block; }
@@ -176,9 +186,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .entry-title,
 .site-main h1 {
   margin: 0 0 var(--s-3);
+  font-family: var(--font-mono);
   font-size: var(--fs-h1);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 .site-main h2 { font-size: var(--fs-h2); margin: var(--s-6) 0 var(--s-3); line-height: 1.3; }
 .site-main h3 { font-size: var(--fs-h3); margin: var(--s-5) 0 var(--s-2); line-height: 1.35; }
@@ -202,10 +214,15 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 time {
   color: var(--fg-muted);
   font-size: var(--fs-small);
+  font-family: var(--font-mono);
 }
 .entry-meta { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); margin-bottom: var(--s-5); }
 
 /* --- Prose media & links ------------------------------------------------- */
+.entry-content {
+  letter-spacing: 0.01em;
+  line-height: 1.78;
+}
 .entry-content img {
   margin-block: var(--s-5);
   border-radius: var(--radius);
@@ -231,12 +248,19 @@ time {
   padding: var(--s-1) var(--s-4);
   border: 1px solid var(--border);
   border-radius: 9999px;
+  font-family: var(--font-mono);
   font-size: var(--fs-small);
   color: var(--fg-muted);
   text-decoration: none;
   background: var(--bg-soft);
+  transition: all 0.25s ease;
 }
-.entry-tags a:hover { color: var(--fg); border-color: var(--accent); }
+.entry-tags a:hover {
+  color: var(--fg);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--bg-soft) 60%, var(--fg) 8%);
+  transform: translateY(-1px);
+}
 [data-theme="dark"] .entry-tags a { border-color: transparent; }
 [data-theme="dark"] .entry-tags a:hover { border-color: var(--accent); }
 
@@ -248,7 +272,7 @@ time {
   gap: var(--s-3);
   margin-top: var(--s-6);
   padding-top: var(--s-4);
-  border-top: 1px solid var(--border);
+  border-top: 1px dashed var(--border);
   max-width: none;
 }
 .post-nav-cell { flex: 1 1 14rem; min-width: 0; }
@@ -262,13 +286,20 @@ time {
   text-decoration: none;
 }
 .post-nav-cell a:hover { color: var(--link); }
-.post-nav-dir { color: var(--fg-muted); font-size: 1.1em; flex-shrink: 0; }
+.post-nav-dir {
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 1.1em;
+  flex-shrink: 0;
+}
 .post-nav-title {
   flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
 }
 
 /* --- Updated badge ------------------------------------------------------- */
