@@ -1,6 +1,6 @@
 +++
 title = 'Markdown Syntax Guide'
-date = 2026-07-01T12:00:00Z
+date = 2026-06-30T12:00:00Z
 draft = false
 toc = true
 tags = ['syntax', 'markdown', 'test']
