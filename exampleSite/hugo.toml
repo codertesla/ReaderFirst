@@ -1,9 +1,18 @@
 baseURL = 'https://example.com/'
 theme = 'ReaderFirst'
 themesDir = '../..'
-locale = 'en-US'
 title = 'ReaderFirst'
+defaultContentLanguage = 'en'
 enableRobotsTXT = true
+# Count CJK characters as words so .WordCount / .ReadingTime are accurate for
+# Chinese/Japanese/Korean content (harmless for Latin-only sites).
+hasCJKLanguage = true
+
+[languages]
+  [languages.en]
+    locale = 'en-US'
+    label = 'English'
+    weight = 1
 
 [params]
 description = 'A minimalist, reading-first Hugo theme optimized for humans and AI agents.'
@@ -33,8 +42,9 @@ pageSize = 10
 
 [markup]
   [markup.highlight]
+    # noClasses=false emits Chroma CSS classes; the actual token colors are
+    # defined (theme-aware) in assets/css/main.css, so no `style` is set here.
     noClasses = false
-    style = 'github'
     lineNos = false
     tabWidth = 2
 
@@ -46,17 +56,22 @@ baseName = 'index'
 home = ['html', 'rss', 'json']
 
 [menus]
+  # `identifier` maps to an i18n key (see i18n/*.toml) so menu labels are
+  # translated per language; `name` is the fallback when no translation exists.
   [[menus.main]]
+    identifier = 'home'
     name = 'Home'
     pageRef = '/'
     weight = 10
 
   [[menus.main]]
+    identifier = 'posts'
     name = 'Posts'
     pageRef = '/posts'
     weight = 20
 
   [[menus.main]]
+    identifier = 'tags'
     name = 'Tags'
     pageRef = '/tags'
     weight = 30
@@ -64,4 +79,4 @@ home = ['html', 'rss', 'json']
 [module]
   [module.hugoVersion]
     extended = false
-    min = '0.146.0'
+    min = '0.158.0'

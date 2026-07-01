@@ -4,6 +4,9 @@ other = "跳到主要内容"
 [menu]
 other = "菜单"
 
+[home]
+other = "首页"
+
 [posts]
 other = "文章"
 

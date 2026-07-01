@@ -75,21 +75,53 @@ theme = 'ReaderFirst'
 
 [markup]
   [markup.highlight]
+    # Token colors are defined (theme-aware) in the theme's CSS, so no `style`.
     noClasses = false
-    style = 'github'
     lineNos = false
     tabWidth = 2
 ```
 
-### Table of contents
+### Front matter reference
 
-To show a TOC on a post, set `toc = true` in its front matter:
+All fields are optional. Per-post front matter (TOML shown; YAML works too):
+
+| Field     | Type     | Effect                                                                                     |
+| --------- | -------- | ------------------------------------------------------------------------------------------ |
+| `title`   | string   | Post title (heading, `<title>`, Open Graph, JSON-LD).                                       |
+| `date`    | date     | Publish date; drives ordering, meta and reading time.                                       |
+| `lastmod` | date     | Shows an "Updated" badge when it differs from `date`.                                       |
+| `draft`   | bool     | `true` hides the post from builds and emits `noindex`.                                      |
+| `author`  | string   | Byline; falls back to `params.author`. Used in meta and JSON-LD.                            |
+| `tags`    | []string | Tag chips, `keywords` meta, JSON-LD `keywords`, and related-post matching.                  |
+| `toc`     | bool     | `true` renders the collapsible outline at the top of the post.                              |
+| `cover`   | string   | Path (or page-bundle `cover.*`/`featured.*`) used as the Open Graph / Twitter share image.  |
+| `license` | string   | Adds a `license` field to the post's BlogPosting JSON-LD.                                    |
 
 ```toml
 +++
 title = 'My Post'
+date = 2026-07-01
+tags = ['hugo', 'markdown']
 toc = true
 +++
+```
+
+### Related posts
+
+The post template shows up to three related posts (server-side, zero JS) based
+on shared tags. Enable it by configuring Hugo's related-content index:
+
+```toml
+[related]
+  includeNewer = true
+  threshold = 80
+  toLower = true
+  [[related.indices]]
+    name = 'tags'
+    weight = 100
+  [[related.indices]]
+    name = 'date'
+    weight = 10
 ```
 
 ### Optional site parameters

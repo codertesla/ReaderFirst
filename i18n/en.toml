@@ -4,6 +4,9 @@ other = "Skip to content"
 [menu]
 other = "Menu"
 
+[home]
+other = "Home"
+
 [posts]
 other = "Posts"
 

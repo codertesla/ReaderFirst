@@ -11,8 +11,8 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
 {{ define "main" }}
   {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
   {{- $dateHuman := .Date | time.Format ":date_long" }}
-  {{- $words := .WordCount }}
-  {{- $minutes := math.Add (div $words 200) 1 }}
+  {{- /* Hugo's .ReadingTime is CJK-aware when hasCJKLanguage/isCJKLanguage is set; floor to 1 min. */}}
+  {{- $minutes := or .ReadingTime 1 }}
   {{- $modMachine := .Lastmod | time.Format "2006-01-02T15:04:05-07:00" }}
   {{- $modHuman := .Lastmod | time.Format ":date_long" }}
   {{- $isUpdated := and .Lastmod (ne (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02")) }}
