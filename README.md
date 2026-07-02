@@ -54,7 +54,7 @@ theme = 'github.com/codertesla/ReaderFirst'
 Fetch the theme:
 
 ```bash
-hugo mod get github.com/codertesla/ReaderFirst@v0.1.0
+hugo mod get github.com/codertesla/ReaderFirst@v0.2.0
 hugo mod tidy
 ```
 
