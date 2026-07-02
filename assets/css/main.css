@@ -244,6 +244,20 @@ time {
   letter-spacing: 0.01em;
   line-height: 1.78;
 }
+/* --- CJK typography (progressive, harmless if unsupported) ---------------
+   Chinese/Japanese/Korean text benefits from slightly looser line-height,
+   hanging punctuation at line start/end, and inter-script spacing between
+   Han/Kana and Latin letters or digits. These properties are no-ops on
+   pure-Latin content, so they are safe to apply globally to .entry-content.
+*/
+:lang(zh) .entry-content,
+:lang(ja) .entry-content,
+:lang(ko) .entry-content {
+  line-height: 1.85;
+  hanging-punctuation: first allow-end;
+  text-spacing-trim: space-all;
+  text-autospace: ideograph-alpha ideograph-numeric;
+}
 .entry-content img {
   margin-block: var(--s-5);
   border-radius: var(--radius);
