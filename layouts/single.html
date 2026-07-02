@@ -9,6 +9,7 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
 @context {page} page The current post.
 */}}
 {{ define "main" }}
+  {{ partial "breadcrumbs.html" . }}
   {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
   {{- $dateHuman := .Date | time.Format ":date_long" }}
   {{- /* Hugo's .ReadingTime is CJK-aware when hasCJKLanguage/isCJKLanguage is set; floor to 1 min. */}}
@@ -142,6 +143,35 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
           } else { fallback(); }
         });
         block.appendChild(btn);
+      });
+    })();
+  </script>
+
+  {{- /* Lightbox: click an image in the article to view it full-size. Vanilla, no deps.
+        No-op when the post has no images. Esc or click the backdrop to close. */ -}}
+  <script>
+    (function () {
+      var imgs = document.querySelectorAll('.entry-content figure img');
+      if (!imgs.length) return;
+      var overlay = document.createElement('div');
+      overlay.className = 'lightbox';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-label', {{ i18n "imageViewer" }});
+      var big = document.createElement('img');
+      overlay.appendChild(big);
+      overlay.addEventListener('click', function () { overlay.classList.remove('open'); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') overlay.classList.remove('open');
+      });
+      document.body.appendChild(overlay);
+      imgs.forEach(function (el) {
+        el.style.cursor = 'zoom-in';
+        el.addEventListener('click', function () {
+          big.src = el.currentSrc || el.src;
+          big.alt = el.alt;
+          overlay.classList.add('open');
+        });
       });
     })();
   </script>

@@ -591,6 +591,93 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
 .page-num { color: var(--fg-muted); font-variant-numeric: tabular-nums; }
 .page-next { margin-left: auto; }
 
+/* --- Code block language badge (render-codeblock hook) ------------------ */
+.code-block { position: relative; max-width: none; }
+.code-lang {
+  position: absolute;
+  top: var(--s-2);
+  left: var(--s-3);
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* --- External link indicator (render-link adds target=_blank) ------------ */
+@media screen {
+  .entry-content a[target="_blank"]::after {
+    content: " \2197";
+    font-size: 0.85em;
+    color: var(--fg-muted);
+  }
+}
+
+/* --- Footnotes (Hugo default markup) ------------------------------------- */
+.footnotes {
+  margin-top: var(--s-6);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+.footnotes ol { padding-left: 1.5rem; max-width: var(--measure); }
+.footnotes li { margin-bottom: var(--s-2); }
+.footnote-ref { font-size: 0.75em; vertical-align: super; }
+.footnote-return { text-decoration: none; }
+
+/* --- Blockquote attribution (<cite>) ------------------------------------ */
+.site-main blockquote cite {
+  display: block;
+  margin-top: var(--s-2);
+  font-size: 0.9em;
+  font-style: normal;
+  color: var(--fg-muted);
+}
+.site-main blockquote cite::before { content: "— "; }
+
+/* --- Nested navigation (children render as an indented vertical stack) --- */
+.site-nav li { position: relative; }
+.site-nav ul ul {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: var(--s-1) 0 var(--s-1) var(--s-3);
+  margin-top: var(--s-1);
+  border-left: 1px solid var(--border);
+}
+.site-nav ul ul a { font-size: 0.8rem; }
+
+/* --- Breadcrumbs --------------------------------------------------------- */
+.breadcrumbs {
+  margin-bottom: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+.breadcrumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-2); padding: 0; margin: 0; }
+.breadcrumbs li + li::before { content: "/"; margin-right: var(--s-2); color: var(--border); }
+.breadcrumbs a { color: var(--fg-muted); text-decoration: none; }
+.breadcrumbs a:hover { color: var(--link); }
+.breadcrumbs [aria-current="page"] { color: var(--fg); }
+
+/* --- Lightbox (image zoom overlay) -------------------------------------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 1000;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 92vh; border-radius: var(--radius); }
+
 /* --- RTL support --------------------------------------------------------- */
 /* baseof.html emits dir="rtl" when a language declares Direction. These
    rules mirror the few physical left/right declarations above so RTL
@@ -653,6 +740,9 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
   .site-header,
   .theme-toggle,
   .code-copy,
+  .code-lang,
+  .breadcrumbs,
+  .lightbox,
   .entry-tags,
   .related,
   .post-nav,

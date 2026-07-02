@@ -13,9 +13,22 @@ ReaderFirst strips away every decoration that gets between the reader and the te
 - **AI-friendly** — Emits JSON-LD structured data (Article, BlogPosting, publisher) and a JSON Feed alongside the standard HTML and RSS outputs, so AI agents and search engines can parse your site reliably.
 - **Table of contents** — An optional, collapsible outline generated from a post's headings. Opt in per post with `toc = true` in front matter; it renders inline at the top of the article with zero JavaScript.
 - **Heading anchors** — Every content heading gets a stable `id` and a hover-revealed `#` permalink for easy deep-linking, via a Markdown render hook.
+- **Code copy & language badge** — Every fenced code block gets a one-click copy button (vanilla JS, with `aria-live` confirmation) and a language label badge.
+- **Image lightbox** — Click an article image to view it full-screen; Esc or click to close. Vanilla JS, no dependencies, no-op when a post has no images.
+- **Breadcrumbs** — A minimal text trail (Home / Section / Title) above each post orientates the reader.
+- **Multilingual & CJK** — Ships with English and Chinese translations; CJK content gets looser line-height, hanging punctuation, and automatic Han–Latin spacing. RTL languages are mirrored via logical CSS properties.
 - **JSON Feed** — A `index.json` feed is published at the site root so feed readers and agents have a machine-readable subscription endpoint.
 - **Accessible** — Semantic HTML, sensible heading order, and tested color contrast in both themes.
 - **Fast** — No client-side JavaScript framework, no layout shift, just static HTML and a small CSS payload.
+
+### Intentionally out of scope
+
+To keep the theme light and reading-focused, the following are not bundled. Most can be added via the optional `layouts/partials/head/custom.html` hook or a user-supplied `assets/js/main.js`:
+
+- **Comments** — no Disqus/Giscus/Remark42 wired in. Drop a comments partial into your site if needed.
+- **Search** — no client-side search library. The JSON Feed at `/index.json` can serve as a search index for external tooling.
+- **Analytics** — no GA/Plausible/etc. Inject your snippet via `partials/head/custom.html`.
+- **Client-side JS framework** — none, by design. The only inline scripts are a no-flash theme resolver, the theme toggle, an optional TOC state memory, a per-post code-copy button, and an image lightbox; all vanilla, dependency-free.
 
 ## Installation
 

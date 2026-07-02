@@ -94,3 +94,9 @@ other = "已复制"
 
 [copyCode]
 other = "复制代码到剪贴板"
+
+[breadcrumbs]
+other = "面包屑导航"
+
+[imageViewer]
+other = "图片查看器"
