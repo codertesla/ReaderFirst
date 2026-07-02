@@ -182,7 +182,8 @@ on shared tags. Enable it by configuring Hugo's related-content index:
 [params]
   description = 'A minimalist, reading-first blog.'
   author = 'Your Name'
-  # logo = 'images/logo.png'              # populates publisher.logo in JSON-LD
+  # publisherType = 'Person'               # 'Person' (personal blog) or 'Organization' (default). When 'Person', the JSON-LD publisher uses the author name and omits the logo.
+  # logo = 'images/logo.png'              # populates publisher.logo in JSON-LD (Organization only)
   # default_og_image = 'images/og.png'    # fallback social share image
   # twitter = '@yourhandle'               # twitter:site meta
 ```
