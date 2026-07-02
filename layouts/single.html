@@ -36,7 +36,7 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
     {{- if .Params.toc }}
       {{- with .TableOfContents }}
     <details class="post-toc">
-      <summary>Outline</summary>
+      <summary>{{ i18n "outline" }}</summary>
       {{ . }}
     </details>
       {{- end }}
@@ -95,6 +95,8 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
   {{- /* Copy button for code blocks — vanilla, no dependencies. */ -}}
   <script>
     (function () {
+      var STR_COPY = {{ i18n "copy" }};
+      var STR_COPIED = {{ i18n "copied" }};
       var blocks = document.querySelectorAll('.entry-content pre');
       if (!blocks.length) return;
       blocks.forEach(function (block) {
@@ -103,12 +105,13 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'code-copy';
-        btn.textContent = 'Copy';
-        btn.setAttribute('aria-label', 'Copy code to clipboard');
+        btn.textContent = STR_COPY;
+        btn.setAttribute('aria-label', {{ i18n "copyCode" }});
+        btn.setAttribute('aria-live', 'polite');
         function done() {
-          btn.textContent = 'Copied';
+          btn.textContent = STR_COPIED;
           btn.classList.add('copied');
-          setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+          setTimeout(function () { btn.textContent = STR_COPY; btn.classList.remove('copied'); }, 1600);
         }
         function fallback() {
           var ta = document.createElement('textarea');

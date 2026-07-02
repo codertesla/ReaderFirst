@@ -17,17 +17,7 @@ which respects the top-level `paginate` setting in hugo.toml.
   {{- end }}
 
   {{- with .Paginator.Pages }}
-  <ul class="post-list">
-    {{- range . }}
-      {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
-      {{- $dateHuman := .Date | time.Format ":date_long" }}
-    <li>
-      <time class="post-date" datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
-      <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-      {{ .Summary }}
-    </li>
-    {{- end }}
-  </ul>
+  {{ partial "post-list.html" (dict "pages" . "heading" "h2") }}
   {{- end }}
 
   {{ partial "pagination.html" . }}

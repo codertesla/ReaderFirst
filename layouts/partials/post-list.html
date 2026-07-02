@@ -1,0 +1,31 @@
+{{- /*
+post-list.html — shared post-list renderer.
+
+Emits a semantic <ul class="post-list"> of paginated pages (date, title link,
+summary). Used by home.html, section.html, _default/list.html and term.html to
+keep one canonical list markup; pass "heading" to choose the title's heading
+level (home page reserves <h1>/<h2> for the site title and the section
+heading, so it renders post titles as <h3>).
+
+@context {pages}   pages  The (paginated) page collection to render.
+@context {heading} heading Optional heading element for each title, "h2" or "h3".
+*/}}
+{{- $pages := .pages -}}
+{{- $heading := .heading | default "h2" -}}
+{{- with $pages }}
+<ul class="post-list">
+  {{- range . }}
+    {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+    {{- $dateHuman := .Date | time.Format ":date_long" }}
+  <li>
+    <time class="post-date" datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+    {{- if eq $heading "h3" }}
+    <h3><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h3>
+    {{- else }}
+    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
+    {{- end }}
+    {{ .Summary }}
+  </li>
+  {{- end }}
+</ul>
+{{- end }}

@@ -85,3 +85,15 @@ other = "The page you are looking for does not exist or may have moved."
 
 [goHome]
 other = "Back to home"
+
+[outline]
+other = "Outline"
+
+[copy]
+other = "Copy"
+
+[copied]
+other = "Copied"
+
+[copyCode]
+other = "Copy code to clipboard"
