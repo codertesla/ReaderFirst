@@ -1,0 +1,20 @@
+{{- /*
+breadcrumbs.html — minimal text breadcrumb trail for single pages.
+
+Renders: Home / Section / Current title (current item is a non-link with
+aria-current="page"). Shown above the entry header to orient the reader
+without chrome. No JS.
+
+@context {page} page The current page (Kind == "page").
+*/}}
+{{- if eq .Kind "page" }}
+<nav class="breadcrumbs" aria-label="{{ i18n "breadcrumbs" }}" data-nosnippet>
+  <ol>
+    <li><a href="{{ site.Home.RelPermalink }}">{{ i18n "home" }}</a></li>
+    {{- with .Parent }}
+    <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+    {{- end }}
+    <li aria-current="page">{{ .Title }}</li>
+  </ol>
+</nav>
+{{- end }}

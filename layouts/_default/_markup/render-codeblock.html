@@ -1,0 +1,14 @@
+{{- /*
+render-codeblock.html — Chroma highlight with a language badge.
+
+Delegates highlighting to transform.HighlightCodeBlock (identical output to
+the default renderer) and wraps it in a .code-block container labelled with
+the fenced code's language (top-left) so readers can identify the snippet at
+a glance. The copy button injected by single.html anchors to the <pre>
+top-right; both sit in the pre's top padding, so they never collide. No JS.
+*/ -}}
+{{- $result := transform.HighlightCodeBlock . -}}
+<div class="code-block">
+  {{- with .Type }}<span class="code-lang" aria-hidden="true">{{ . }}</span>{{ end -}}
+  {{ $result.Wrapped }}
+</div>

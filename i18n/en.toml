@@ -94,3 +94,9 @@ other = "Copied"
 
 [copyCode]
 other = "Copy code to clipboard"
+
+[breadcrumbs]
+other = "Breadcrumb"
+
+[imageViewer]
+other = "Image viewer"
