@@ -32,13 +32,29 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
       </div>
     </header>
 
-    {{- /* Collapsible TOC: only when front matter opts in and headings exist. */ -}}
+    {{- /* Collapsible TOC: only when front matter opts in and headings exist.
+       A tiny inline script restores the reader's last open/collapsed choice
+       synchronously during parse (no FOUC) and persists toggles via localStorage. */ -}}
     {{- if .Params.toc }}
       {{- with .TableOfContents }}
     <details class="post-toc">
       <summary>{{ i18n "outline" }}</summary>
       {{ . }}
     </details>
+    <script>
+      (function () {
+        var toc = document.querySelector('.post-toc');
+        if (!toc) return;
+        try {
+          var s = localStorage.getItem('rf-toc');
+          if (s === 'open') { toc.open = true; }
+          else if (s === 'closed') { toc.open = false; }
+          toc.addEventListener('toggle', function () {
+            try { localStorage.setItem('rf-toc', toc.open ? 'open' : 'closed'); } catch (e) {}
+          });
+        } catch (e) {}
+      })();
+    </script>
       {{- end }}
     {{- end }}
 
