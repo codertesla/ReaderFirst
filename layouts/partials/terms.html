@@ -11,12 +11,15 @@ terms.html — for a given taxonomy, renders the terms assigned to a page.
 {{- $taxonomy := .taxonomy }}
 
 {{- with $page.GetTerms $taxonomy }}
-  {{- $label := (index . 0).Parent.LinkTitle }}
+  {{- /* Prefer the i18n translation for the taxonomy label (e.g. "Tags" / "标签");
+        fall back to the taxonomy's own LinkTitle when no translation exists. */ -}}
+  {{- $label := i18n $taxonomy }}
+  {{- if or (eq $label $taxonomy) (eq $label "") }}{{- $label = (index . 0).Parent.LinkTitle }}{{- end }}
   <nav class="entry-tags" aria-label="{{ $label }}">
     <span class="entry-tags-label">{{ $label }}:</span>
     <ul>
       {{- range . }}
-        <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
       {{- end }}
     </ul>
   </nav>
