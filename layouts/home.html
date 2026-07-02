@@ -19,6 +19,10 @@ Renders the home page's own content (if any) followed by a semantic
   <section class="post-list-section" aria-label="{{ i18n "recentPosts" }}">
     <h2 class="post-list-title">{{ i18n "recentPosts" }}</h2>
     {{ partial "post-list.html" (dict "pages" . "heading" "h3") }}
+    {{- /* Inline "All posts" affordance to the posts section, for serial readers. */ -}}
+    {{- with site.GetPage "/posts/" }}
+    <p class="all-posts-link"><a href="{{ .RelPermalink }}">{{ i18n "allPosts" }} &rarr;</a></p>
+    {{- end }}
   </section>
   {{- end }}
 

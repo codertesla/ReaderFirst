@@ -409,6 +409,16 @@ time {
 .post-list h3 a:hover { color: var(--link); }
 .post-list .post-date { display: block; color: var(--fg-muted); font-size: var(--fs-small); }
 
+/* "All posts" affordance at the foot of the home post-list section. */
+.all-posts-link {
+  margin: var(--s-4) 0 0;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+}
+.all-posts-link a { color: var(--fg-muted); text-decoration: none; }
+.all-posts-link a:hover { color: var(--link); }
+
 /* --- Term list (taxonomy overview) --------------------------------------- */
 .term-list {
   list-style: none;
@@ -580,6 +590,25 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
 .page-disabled { color: var(--fg-muted); opacity: 0.4; }
 .page-num { color: var(--fg-muted); font-variant-numeric: tabular-nums; }
 .page-next { margin-left: auto; }
+
+/* --- RTL support --------------------------------------------------------- */
+/* baseof.html emits dir="rtl" when a language declares Direction. These
+   rules mirror the few physical left/right declarations above so RTL
+   layouts (Arabic, Hebrew, Persian…) read correctly. Most of the layout
+   already uses logical properties (margin-inline/padding-inline) which flip
+   automatically; only the physical ones below need an explicit mirror. */
+[dir="rtl"] .site-main ul,
+[dir="rtl"] .site-main ol { padding-left: 0; padding-right: 1.5rem; }
+[dir="rtl"] .site-main blockquote { border-left: 0; border-right: 3px solid var(--border); }
+[dir="rtl"] .post-nav-next { text-align: left; }
+[dir="rtl"] .post-nav-prev { text-align: right; }
+[dir="rtl"] .post-toc ul { padding-left: 0; padding-right: var(--s-4); }
+[dir="rtl"] .post-toc ul ul { padding-left: 0; padding-right: var(--s-4); }
+[dir="rtl"] .heading-anchor { margin-left: 0; margin-right: 0.35em; }
+[dir="rtl"] .all-posts-link { text-align: left; }
+/* Code stays LTR even in RTL pages. */
+[dir="rtl"] pre,
+[dir="rtl"] code { direction: ltr; }
 
 /* --- Reduced motion ------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
