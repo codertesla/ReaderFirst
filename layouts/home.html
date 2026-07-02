@@ -18,17 +18,7 @@ Renders the home page's own content (if any) followed by a semantic
   {{- with $paginator.Pages }}
   <section class="post-list-section" aria-label="{{ i18n "recentPosts" }}">
     <h2 class="post-list-title">{{ i18n "recentPosts" }}</h2>
-    <ul class="post-list">
-      {{- range . }}
-        {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
-        {{- $dateHuman := .Date | time.Format ":date_long" }}
-      <li>
-        <time class="post-date" datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
-        <h3><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h3>
-        {{ .Summary }}
-      </li>
-      {{- end }}
-    </ul>
+    {{ partial "post-list.html" (dict "pages" . "heading" "h3") }}
   </section>
   {{- end }}
 

@@ -85,3 +85,15 @@ other = "你访问的页面不存在或可能已被移动。"
 
 [goHome]
 other = "返回首页"
+
+[outline]
+other = "目录"
+
+[copy]
+other = "复制"
+
+[copied]
+other = "已复制"
+
+[copyCode]
+other = "复制代码到剪贴板"
