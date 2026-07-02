@@ -16,6 +16,11 @@ All values are plainified so no stray HTML leaks into the JSON payload.
 {{- $author := .Params.author | default site.Params.author | default site.Params.creator | default site.Title }}
 {{- $logo := or site.Params.logo site.Params.default_og_image }}
 
+{{- /* Publisher: Organization (default, for sites/brands) or Person (personal
+       blogs). When Person, the author name is used and no logo is attached. */ -}}
+{{- $pubType := site.Params.publisherType | default "Organization" }}
+{{- $pubName := cond (eq $pubType "Person") ($author | plainify) (site.Title | plainify) }}
+
 {{- $absLogo := "" }}
 {{- with $logo }}
   {{- $absLogo = . }}
@@ -44,10 +49,10 @@ All values are plainified so no stray HTML leaks into the JSON payload.
     "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
     "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
     "author" (dict "@type" "Person" "name" ($author | plainify))
-    "publisher" (dict "@type" "Organization" "name" (site.Title | plainify))
+    "publisher" (dict "@type" $pubType "name" $pubName)
   }}
-  {{- with $absLogo }}
-    {{- $logoObj := dict "@type" "ImageObject" "url" . }}
+  {{- if and $absLogo (eq $pubType "Organization") }}
+    {{- $logoObj := dict "@type" "ImageObject" "url" $absLogo }}
     {{- $schema = merge $schema (dict "publisher" (dict "@type" "Organization" "name" (site.Title | plainify) "logo" $logoObj)) }}
   {{- end }}
   {{- with $image }}
@@ -59,7 +64,7 @@ All values are plainified so no stray HTML leaks into the JSON payload.
   {{- with .Params.license }}
     {{- $schema = merge $schema (dict "license" .) }}
   {{- end }}
-<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeJS }}</script>
 {{- else }}
   {{- $schema := dict
     "@context" "https://schema.org"
@@ -68,10 +73,11 @@ All values are plainified so no stray HTML leaks into the JSON payload.
     "url" site.BaseURL
     "description" ($desc | truncate 300)
     "inLanguage" site.Language.Lang
+    "publisher" (dict "@type" $pubType "name" $pubName)
   }}
-  {{- with $absLogo }}
-    {{- $logoObj := dict "@type" "ImageObject" "url" . }}
+  {{- if and $absLogo (eq $pubType "Organization") }}
+    {{- $logoObj := dict "@type" "ImageObject" "url" $absLogo }}
     {{- $schema = merge $schema (dict "publisher" (dict "@type" "Organization" "name" (site.Title | plainify) "logo" $logoObj)) }}
   {{- end }}
-<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeJS }}</script>
 {{- end }}
