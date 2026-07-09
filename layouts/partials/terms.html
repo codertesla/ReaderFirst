@@ -16,7 +16,6 @@ terms.html — for a given taxonomy, renders the terms assigned to a page.
   {{- $label := i18n $taxonomy }}
   {{- if or (eq $label $taxonomy) (eq $label "") }}{{- $label = (index . 0).Parent.LinkTitle }}{{- end }}
   <nav class="entry-tags" aria-label="{{ $label }}">
-    <span class="entry-tags-label">{{ $label }}:</span>
     <ul>
       {{- range . }}
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>

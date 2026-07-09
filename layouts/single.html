@@ -100,8 +100,9 @@ with a real scroll-progress indicator.
       {{ .Content }}
     </div>
 
-    {{- /* End-of-article share row: copy permalink (vanilla, no social SDKs). */ -}}
-    <div class="entry-share" data-nosnippet>
+    {{- /* End bar: tags (left) + copy permalink (right). One border closes the prose. */ -}}
+    <div class="entry-end" data-nosnippet>
+      {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
       <button type="button" class="copy-link" aria-live="polite">
         {{ i18n "copyLink" }}
       </button>
@@ -134,13 +135,12 @@ with a real scroll-progress indicator.
       })();
     </script>
 
-    {{- /* Author card: page author wins, else site.Params.author; bio optional. */ -}}
+    {{- /* Lightweight byline — no heavy card chrome. */ -}}
     {{- with $author }}
-    <aside class="author-card" aria-label="{{ i18n "writtenBy" }}">
+    <aside class="author-byline" aria-label="{{ i18n "writtenBy" }}">
       <div class="author-avatar" aria-hidden="true">{{ substr . 0 1 | upper }}</div>
       <div class="author-info">
-        <div class="author-role">{{ i18n "writtenBy" }}</div>
-        <div class="author-name">{{ . }}</div>
+        <div class="author-name"><span class="author-role">{{ i18n "writtenBy" }}</span> {{ . }}</div>
         {{- $bio := $.Params.authorBio | default site.Params.authorBio }}
         {{- with $bio }}
         <p class="author-bio">{{ . }}</p>
@@ -149,10 +149,7 @@ with a real scroll-progress indicator.
     </aside>
     {{- end }}
 
-    {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
-
-    {{- /* Related posts: server-side (keyword/tag relevance), zero JS.
-       .Related respects the site's [related] config; no hard-coded section. */ -}}
+    {{- /* Related posts: server-side (keyword/tag relevance), zero JS. */ -}}
     {{- $related := first 3 (site.RegularPages.Related .) }}
     {{- with $related }}
     <nav class="related" aria-label="{{ i18n "relatedPosts" }}" data-nosnippet>
@@ -173,29 +170,25 @@ with a real scroll-progress indicator.
     </nav>
     {{- end }}
 
-    {{- /* Prev/next within the same section, by date. rel=prev/next aids crawling. */ -}}
+    {{- /* Prev/next within the same section, by date. Empty cells are omitted. */ -}}
     {{- $newer := .NextInSection }}
     {{- $older := .PrevInSection }}
     {{- if or $newer $older }}
     <nav class="post-nav" aria-label="{{ i18n "postNav" }}" data-nosnippet>
-      <div class="post-nav-cell post-nav-prev">
-        {{- with $older }}
-        <a href="{{ .RelPermalink }}" rel="prev">
-          <span class="post-nav-label">{{ i18n "previous" }}</span>
-          <span class="post-nav-title">{{ .LinkTitle }}</span>
-          <span class="post-nav-meta">{{ .Date | time.Format ":date_long" }} · {{ or .ReadingTime 1 }} {{ i18n "minRead" }}</span>
-        </a>
-        {{- end }}
-      </div>
-      <div class="post-nav-cell post-nav-next">
-        {{- with $newer }}
-        <a href="{{ .RelPermalink }}" rel="next">
-          <span class="post-nav-label">{{ i18n "next" }}</span>
-          <span class="post-nav-title">{{ .LinkTitle }}</span>
-          <span class="post-nav-meta">{{ .Date | time.Format ":date_long" }} · {{ or .ReadingTime 1 }} {{ i18n "minRead" }}</span>
-        </a>
-        {{- end }}
-      </div>
+      {{- with $older }}
+      <a class="post-nav-cell post-nav-prev" href="{{ .RelPermalink }}" rel="prev">
+        <span class="post-nav-label">{{ i18n "previous" }}</span>
+        <span class="post-nav-title">{{ .LinkTitle }}</span>
+        <span class="post-nav-meta">{{ .Date | time.Format ":date_long" }} · {{ or .ReadingTime 1 }} {{ i18n "minRead" }}</span>
+      </a>
+      {{- end }}
+      {{- with $newer }}
+      <a class="post-nav-cell post-nav-next" href="{{ .RelPermalink }}" rel="next">
+        <span class="post-nav-label">{{ i18n "next" }}</span>
+        <span class="post-nav-title">{{ .LinkTitle }}</span>
+        <span class="post-nav-meta">{{ .Date | time.Format ":date_long" }} · {{ or .ReadingTime 1 }} {{ i18n "minRead" }}</span>
+      </a>
+      {{- end }}
     </nav>
     {{- end }}
     </div>{{/* /.entry-main */}}
