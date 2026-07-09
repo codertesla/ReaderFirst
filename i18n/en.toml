@@ -94,3 +94,24 @@ other = "Breadcrumb"
 
 [imageViewer]
 other = "Image viewer"
+
+[read]
+other = "read"
+
+[copyLink]
+other = "Copy link"
+
+[linkCopied]
+other = "Link copied"
+
+[writtenBy]
+other = "Written by"
+
+[previous]
+other = "Previous"
+
+[next]
+other = "Next"
+
+[aside]
+other = "Aside"

@@ -33,6 +33,8 @@ hasCJKLanguage = true
 [params]
 description = 'A minimalist, reading-first Hugo theme optimized for humans and AI agents.'
 author = 'ReaderFirst'
+# Optional one-line bio shown in the end-of-post author card.
+authorBio = 'A reading-first Hugo theme. Ships with dark mode, TOC, and structured data.'
 # Explicit main section for home lists, JSON Feed, and related-post scoping.
 mainSections = ['posts']
 # Posts per page on the home / section / term listings. Consumed directly by

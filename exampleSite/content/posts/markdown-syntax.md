@@ -3,11 +3,20 @@ title = 'Markdown Syntax Guide'
 date = 2026-06-30T12:00:00Z
 draft = false
 toc = true
+subtitle = 'A living checklist for typography, TOC tracking, pull quotes, and asides.'
 tags = ['syntax', 'markdown', 'test']
 categories = ['guides']
 +++
 
-A complete reference of Markdown elements rendered by the **ReaderFirst** theme. Use this page to verify typography, spacing, color contrast in both light and dark modes, and that the table of contents (TOC) on the right tracks every heading below.
+A complete reference of Markdown elements rendered by the **ReaderFirst** theme. Use this page to verify typography, spacing, color contrast in both light and dark modes, and that the table of contents (TOC) tracks every heading below.
+
+{{< pullquote attr="ReaderFirst design notes" >}}
+Nothing should compete with the prose — not chrome, not cards, not a second column of noise.
+{{< /pullquote >}}
+
+{{< aside label="Tip" >}}
+Set `toc = true` in front matter for a sticky outline on wide screens and a collapsible outline on small ones. Reading progress updates as you scroll.
+{{< /aside >}}
 
 ## Headings
 

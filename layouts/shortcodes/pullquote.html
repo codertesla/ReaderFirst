@@ -1,0 +1,16 @@
+{{- /*
+pullquote.html — emphasized pull quote, distinct from a regular blockquote.
+
+Usage:
+  {{< pullquote attr="from the field notes" >}}
+  The medium, it turned out, was still the message.
+  {{< /pullquote >}}
+
+@context {shortcode}
+*/ -}}
+<blockquote class="pull-quote">
+  <p class="pull-quote-text">{{ .Inner | markdownify }}</p>
+  {{- with .Get "attr" }}
+  <footer class="pull-quote-attr">{{ . }}</footer>
+  {{- end }}
+</blockquote>

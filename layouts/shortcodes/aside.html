@@ -1,0 +1,18 @@
+{{- /*
+aside.html — a short editorial aside / callout inside the reading column.
+
+Usage:
+  {{< aside label="Note" >}}
+  Hosting bill: zero. Deploy with one rsync.
+  {{< /aside >}}
+
+@context {shortcode}
+*/ -}}
+<aside class="content-aside">
+  {{- with .Get "label" }}
+  <div class="content-aside-label">{{ . }}</div>
+  {{- else }}
+  <div class="content-aside-label">{{ i18n "aside" }}</div>
+  {{- end }}
+  <div class="content-aside-body">{{ .Inner | markdownify }}</div>
+</aside>

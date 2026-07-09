@@ -11,7 +11,9 @@ ReaderFirst strips away every decoration that gets between the reader and the te
 - **Minimalist** — One reading column, generous whitespace, and a restrained type scale. Nothing competes with the prose.
 - **Adaptive dark mode** — Follows the visitor's `prefers-color-scheme` setting automatically, with no flash of incorrect theme on load.
 - **AI-friendly** — Emits JSON-LD structured data (Article, BlogPosting, publisher) and a JSON Feed alongside the standard HTML and RSS outputs, so AI agents and search engines can parse your site reliably.
-- **Table of contents** — An optional, collapsible outline generated from a post's headings. Opt in per post with `toc = true` in front matter; it renders inline at the top of the article with zero JavaScript.
+- **Table of contents** — An optional outline generated from a post's headings. Opt in with `toc = true`; collapsible on small screens, sticky sidebar with live reading progress on wide viewports.
+- **Editorial shortcodes** — `pullquote` and `aside` for magazine-style emphasis without leaving Markdown.
+- **Article chrome** — Optional subtitle/dek, category kicker, copy-link button, author card, richer prev/next and related summaries.
 - **Heading anchors** — Every content heading gets a stable `id` and a hover-revealed `#` permalink for easy deep-linking, via a Markdown render hook.
 - **Code copy & language badge** — Every fenced code block gets a one-click copy button (vanilla JS, with `aria-live` confirmation) and a language label badge.
 - **Image lightbox** — Click an article image to view it full-screen; Esc or click to close. Vanilla JS, no dependencies, no-op when a post has no images.
@@ -28,7 +30,7 @@ To keep the theme light and reading-focused, the following are not bundled. Most
 - **Comments** — no Disqus/Giscus/Remark42 wired in. Drop a comments partial into your site if needed.
 - **Search** — no client-side search library. The JSON Feed at `/index.json` can serve as a search index for external tooling.
 - **Analytics** — no GA/Plausible/etc. Inject your snippet via `partials/head/custom.html`.
-- **Client-side JS framework** — none, by design. The only inline scripts are a no-flash theme resolver, the theme toggle, an optional TOC state memory, a per-post code-copy button, and an image lightbox; all vanilla, dependency-free.
+- **Client-side JS framework** — none, by design. The only inline scripts are a no-flash theme resolver, the theme toggle, optional TOC state/progress, copy-link, a per-post code-copy button, and an image lightbox; all vanilla, dependency-free.
 
 ## Installation
 
@@ -137,25 +139,41 @@ theme = 'github.com/codertesla/ReaderFirst'
 
 All fields are optional. Per-post front matter (TOML shown; YAML works too):
 
-| Field     | Type     | Effect                                                                                     |
-| --------- | -------- | ------------------------------------------------------------------------------------------ |
-| `title`   | string   | Post title (heading, `<title>`, Open Graph, JSON-LD).                                       |
-| `date`    | date     | Publish date; drives ordering, meta and reading time.                                       |
-| `lastmod` | date     | Shows an "Updated" badge when it differs from `date`.                                       |
-| `draft`   | bool     | `true` hides the post from builds and emits `noindex`.                                      |
-| `author`  | string   | Byline; falls back to `params.author`. Used in meta and JSON-LD.                            |
-| `tags`    | []string | Tag chips, `keywords` meta, JSON-LD `keywords`, and related-post matching.                  |
-| `toc`     | bool     | `true` renders the collapsible outline at the top of the post.                              |
-| `cover`   | string   | Path (or page-bundle `cover.*`/`featured.*`) used as the Open Graph / Twitter share image.  |
-| `license` | string   | Adds a `license` field to the post's BlogPosting JSON-LD.                                    |
+| Field        | Type     | Effect                                                                                     |
+| ------------ | -------- | ------------------------------------------------------------------------------------------ |
+| `title`      | string   | Post title (heading, `<title>`, Open Graph, JSON-LD).                                       |
+| `subtitle`   | string   | Optional dek under the title (falls back to `description`).                                 |
+| `description`| string   | Meta description; also used as dek when `subtitle` is absent.                               |
+| `date`       | date     | Publish date; drives ordering, meta and reading time.                                       |
+| `lastmod`    | date     | Shows an "Updated" badge when it differs from `date`.                                       |
+| `draft`      | bool     | `true` hides the post from builds and emits `noindex`.                                      |
+| `author`     | string   | Byline; falls back to `params.author`. Used in meta, author card, and JSON-LD.              |
+| `authorBio`  | string   | Optional bio on the author card (falls back to `params.authorBio`).                         |
+| `tags`       | []string | Tag chips, `keywords` meta, JSON-LD `keywords`, and related-post matching.                  |
+| `toc`        | bool     | `true` renders the outline (sticky rail on wide screens, collapsible on small).             |
+| `cover`      | string   | Path (or page-bundle `cover.*`/`featured.*`) used as the Open Graph / Twitter share image.  |
+| `license`    | string   | Adds a `license` field to the post's BlogPosting JSON-LD.                                    |
 
 ```toml
 +++
 title = 'My Post'
+subtitle = 'A short dek that sets the reading expectation.'
 date = 2026-07-01
 tags = ['hugo', 'markdown']
 toc = true
 +++
+```
+
+Shortcodes inside Markdown:
+
+```markdown
+{{</* pullquote attr="optional attribution" */>}}
+A sentence worth lifting out of the flow.
+{{</* /pullquote */>}}
+
+{{</* aside label="Note" */>}}
+A short editorial aside beside the main argument.
+{{</* /aside */>}}
 ```
 
 ### Related posts
@@ -182,10 +200,18 @@ on shared tags. Enable it by configuring Hugo's related-content index:
 [params]
   description = 'A minimalist, reading-first blog.'
   author = 'Your Name'
+  # authorBio = 'One line about the author for the end-of-post card.'
+  # paginateSize = 10                     # posts per page on home / section / term lists
   # publisherType = 'Person'               # 'Person' (personal blog) or 'Organization' (default). When 'Person', the JSON-LD publisher uses the author name and omits the logo.
   # logo = 'images/logo.png'              # populates publisher.logo in JSON-LD (Organization only)
   # default_og_image = 'images/og.png'    # fallback social share image
   # twitter = '@yourhandle'               # twitter:site meta
+  # [params.style]                       # optional design tokens (omit for defaults)
+  #   bodyFont    = 'Georgia, serif'
+  #   headingFont = 'Georgia, serif'
+  #   accent      = '#7a2e2e'
+  #   maxWidth    = '720px'
+  #   measure     = '72ch'
 ```
 
 ## Example Site

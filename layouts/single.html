@@ -1,10 +1,11 @@
 {{- /*
 single.html — single post view.
 
-Semantic <article> with an <header> (title + meta) and the rendered content,
-followed by the tags nav. Meta is machine-readable via <time datetime>, and
-reading time is derived from WordCount (≈200 wpm). Stays in sync with the
-.entry-header / .entry-meta / .entry-tags styles in main.css.
+Semantic <article> with an <header> (kicker, title, optional dek, meta) and
+the rendered content, followed by share/author, tags, related, and prev/next.
+When front matter sets toc = true, a single TableOfContents instance is shown
+as a collapsible outline on narrow viewports and a sticky rail on wide ones,
+with a real scroll-progress indicator.
 
 @context {page} page The current post.
 */}}
@@ -17,10 +18,30 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
   {{- $modMachine := .Lastmod | time.Format "2006-01-02T15:04:05-07:00" }}
   {{- $modHuman := .Lastmod | time.Format ":date_long" }}
   {{- $isUpdated := and .Lastmod (ne (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02")) }}
+  {{- $author := or .Params.author site.Params.author }}
+  {{- $dek := or .Params.subtitle .Params.description .Description }}
+  {{- $hasToc := and .Params.toc .TableOfContents }}
 
-  <article class="entry">
+  <article class="entry{{ if $hasToc }} entry--with-toc{{ end }}">
     <header class="entry-header">
+      {{- /* Kicker: first category (if any) · reading time — light editorial cue. */ -}}
+      {{- $cats := .GetTerms "categories" }}
+      {{- if or $cats $minutes }}
+      <p class="entry-kicker">
+        {{- with $cats }}
+          {{- range $i, $c := . }}{{ if $i }} · {{ end }}{{ $c.LinkTitle }}{{ end }}
+          {{- if $minutes }} · {{ end }}
+        {{- end }}
+        {{- if $minutes }}{{ $minutes }} {{ i18n "minRead" }}{{ end }}
+      </p>
+      {{- end }}
+
       <h1 class="entry-title">{{ .Title }}</h1>
+
+      {{- with $dek }}
+      <p class="entry-dek">{{ . }}</p>
+      {{- end }}
+
       <div class="entry-meta">
         <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
         {{- with .Params.author }}
@@ -29,39 +50,101 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
         {{- if $isUpdated }}
         <span class="entry-updated">{{ i18n "updatedOn" }} <time datetime="{{ $modMachine }}">{{ $modHuman }}</time></span>
         {{- end }}
-        <span class="entry-reading">{{ $minutes }} {{ i18n "minRead" }}</span>
       </div>
     </header>
 
-    {{- /* Collapsible TOC: only when front matter opts in and headings exist.
-       A tiny inline script restores the reader's last open/collapsed choice
-       synchronously during parse (no FOUC) and persists toggles via localStorage. */ -}}
-    {{- if .Params.toc }}
-      {{- with .TableOfContents }}
+    {{- if $hasToc }}
+      {{- /* One TOC instance: collapsible on narrow screens, sticky rail on wide.
+         Duplicate .TableOfContents would emit two #TableOfContents ids. */ -}}
     <details class="post-toc">
       <summary>{{ i18n "outline" }}</summary>
-      {{ . }}
+      {{ .TableOfContents }}
+      <div class="reading-progress" hidden>
+        <div class="progress-label"><span class="progress-pct">0</span>% {{ i18n "read" }}</div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
     </details>
     <script>
       (function () {
         var toc = document.querySelector('.post-toc');
         if (!toc) return;
-        try {
-          var s = localStorage.getItem('rf-toc');
-          if (s === 'open') { toc.open = true; }
-          else if (s === 'closed') { toc.open = false; }
-          toc.addEventListener('toggle', function () {
-            try { localStorage.setItem('rf-toc', toc.open ? 'open' : 'closed'); } catch (e) {}
-          });
-        } catch (e) {}
+        var mq = window.matchMedia('(min-width: 1100px)');
+        function apply() {
+          if (mq.matches) {
+            toc.open = true;
+            return;
+          }
+          try {
+            var s = localStorage.getItem('rf-toc');
+            if (s === 'open') toc.open = true;
+            else if (s === 'closed') toc.open = false;
+          } catch (e) {}
+        }
+        apply();
+        if (mq.addEventListener) mq.addEventListener('change', apply);
+        else if (mq.addListener) mq.addListener(apply);
+        toc.addEventListener('toggle', function () {
+          if (mq.matches) return;
+          try { localStorage.setItem('rf-toc', toc.open ? 'open' : 'closed'); } catch (e) {}
+        });
       })();
     </script>
-      {{- end }}
     {{- end }}
 
     <div class="entry-content">
       {{ .Content }}
     </div>
+
+    {{- /* End-of-article share row: copy permalink (vanilla, no social SDKs). */ -}}
+    <div class="entry-share" data-nosnippet>
+      <button type="button" class="copy-link" aria-live="polite">
+        {{ i18n "copyLink" }}
+      </button>
+    </div>
+    <script>
+      (function () {
+        var btn = document.querySelector('.copy-link');
+        if (!btn) return;
+        {{- /* Inside <script>, Hugo JS-escapes/quotes template strings — do not
+           also pipe through jsonify or values become "\"Copy link\"". */ -}}
+        var STR_COPY = {{ i18n "copyLink" }};
+        var STR_COPIED = {{ i18n "linkCopied" }};
+        var url = {{ .Permalink }};
+        function done() {
+          btn.textContent = STR_COPIED;
+          setTimeout(function () { btn.textContent = STR_COPY; }, 1600);
+        }
+        function fallback() {
+          var ta = document.createElement('textarea');
+          ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.focus(); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+        btn.addEventListener('click', function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(done).catch(fallback);
+          } else { fallback(); }
+        });
+      })();
+    </script>
+
+    {{- /* Author card: page author wins, else site.Params.author; bio optional. */ -}}
+    {{- with $author }}
+    <aside class="author-card" aria-label="{{ i18n "writtenBy" }}">
+      <div class="author-avatar" aria-hidden="true">{{ substr . 0 1 | upper }}</div>
+      <div class="author-info">
+        <div class="author-role">{{ i18n "writtenBy" }}</div>
+        <div class="author-name">{{ . }}</div>
+        {{- $bio := $.Params.authorBio | default site.Params.authorBio }}
+        {{- with $bio }}
+        <p class="author-bio">{{ . }}</p>
+        {{- end }}
+      </div>
+    </aside>
+    {{- end }}
 
     {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
 
@@ -78,6 +161,9 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
             <span class="related-post-title">{{ .LinkTitle }}</span>
             <time class="related-post-date" datetime="{{ .Date | time.Format "2006-01-02T15:04:05-07:00" }}">{{ .Date | time.Format ":date_long" }}</time>
           </a>
+          {{- with or .Description .Summary }}
+          <p class="related-post-dek">{{ . | plainify | truncate 120 }}</p>
+          {{- end }}
         </li>
         {{- end }}
       </ul>
@@ -92,22 +178,88 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
       <div class="post-nav-cell post-nav-prev">
         {{- with $older }}
         <a href="{{ .RelPermalink }}" rel="prev">
-          <span class="post-nav-dir" aria-hidden="true">&larr;</span>
+          <span class="post-nav-label">{{ i18n "previous" }}</span>
           <span class="post-nav-title">{{ .LinkTitle }}</span>
+          <span class="post-nav-meta">{{ .Date | time.Format ":date_long" }} · {{ or .ReadingTime 1 }} {{ i18n "minRead" }}</span>
         </a>
         {{- end }}
       </div>
       <div class="post-nav-cell post-nav-next">
         {{- with $newer }}
         <a href="{{ .RelPermalink }}" rel="next">
+          <span class="post-nav-label">{{ i18n "next" }}</span>
           <span class="post-nav-title">{{ .LinkTitle }}</span>
-          <span class="post-nav-dir" aria-hidden="true">&rarr;</span>
+          <span class="post-nav-meta">{{ .Date | time.Format ":date_long" }} · {{ or .ReadingTime 1 }} {{ i18n "minRead" }}</span>
         </a>
         {{- end }}
       </div>
     </nav>
     {{- end }}
   </article>
+
+  {{- /* Sticky TOC: reading progress + active heading highlight. */ -}}
+  {{- if $hasToc }}
+  <script>
+    (function () {
+      var content = document.querySelector('.entry-content');
+      var toc = document.querySelector('.post-toc');
+      if (!content || !toc) return;
+
+      var progress = toc.querySelector('.reading-progress');
+      var fill = toc.querySelector('.progress-fill');
+      var pctEl = toc.querySelector('.progress-pct');
+      var bar = toc.querySelector('.progress-track');
+      if (progress) progress.hidden = false;
+
+      var links = toc.querySelectorAll('#TableOfContents a[href^="#"]');
+      var headings = [];
+      links.forEach(function (a) {
+        var id = decodeURIComponent((a.getAttribute('href') || '').slice(1));
+        if (!id) return;
+        var el = document.getElementById(id);
+        if (el) headings.push({ id: id, el: el, link: a });
+      });
+
+      function setActive(id) {
+        links.forEach(function (a) {
+          var on = a.getAttribute('href') === '#' + id;
+          a.classList.toggle('is-active', on);
+          if (on) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
+        });
+      }
+
+      function onScroll() {
+        var rect = content.getBoundingClientRect();
+        var total = content.offsetHeight - window.innerHeight;
+        var done = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+        var pct = total <= 0 ? 100 : Math.round((done / total) * 100);
+        pct = Math.min(100, Math.max(0, pct));
+        if (fill) fill.style.width = pct + '%';
+        if (pctEl) pctEl.textContent = String(pct);
+        if (bar) bar.setAttribute('aria-valuenow', String(pct));
+
+        if (!headings.length) return;
+        var current = headings[0].id;
+        var mark = window.scrollY + 96;
+        for (var i = 0; i < headings.length; i++) {
+          if (headings[i].el.offsetTop <= mark) current = headings[i].id;
+        }
+        setActive(current);
+      }
+
+      var ticking = false;
+      function requestTick() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { ticking = false; onScroll(); });
+      }
+      window.addEventListener('scroll', requestTick, { passive: true });
+      window.addEventListener('resize', requestTick);
+      onScroll();
+    })();
+  </script>
+  {{- end }}
 
   {{- /* Copy button for code blocks — vanilla, no dependencies. */ -}}
   <script>
