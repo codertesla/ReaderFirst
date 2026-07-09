@@ -115,3 +115,18 @@ other = "Next"
 
 [aside]
 other = "Aside"
+
+[footerLinks]
+other = "Site links"
+
+[rss]
+other = "RSS"
+
+[jsonFeed]
+other = "JSON Feed"
+
+[sitemap]
+other = "Sitemap"
+
+[backToTop]
+other = "Back to top ↑"

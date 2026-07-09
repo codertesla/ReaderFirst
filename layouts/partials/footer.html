@@ -1,7 +1,21 @@
 {{- /*
-footer.html — site footer.
+footer.html — single-row site footer.
+
+Copyright on the left; RSS / JSON Feed / Sitemap / Back to top on the right.
+Feed links come from the home page's OutputFormats so they resolve correctly
+on every page.
 
 @context {page} page The current page.
 */}}
-
-<p>&copy; {{ now.Year }} {{ site.Title }}. {{ i18n "allRightsReserved" }}.</p>
+{{- $home := site.Home }}
+<p class="footer-copy">&copy; {{ now.Year }} {{ site.Title }}. {{ i18n "allRightsReserved" }}.</p>
+<nav class="footer-links" aria-label="{{ i18n "footerLinks" }}">
+  {{- with $home.OutputFormats.Get "RSS" }}
+  <a href="{{ .RelPermalink }}">{{ i18n "rss" }}</a>
+  {{- end }}
+  {{- with $home.OutputFormats.Get "JSON" }}
+  <a href="{{ .RelPermalink }}">{{ i18n "jsonFeed" }}</a>
+  {{- end }}
+  <a href="{{ "sitemap.xml" | relURL }}">{{ i18n "sitemap" }}</a>
+  <a class="footer-top-link" href="#main">{{ i18n "backToTop" }}</a>
+</nav>

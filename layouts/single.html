@@ -10,7 +10,6 @@ with a real scroll-progress indicator.
 @context {page} page The current post.
 */}}
 {{ define "main" }}
-  {{ partial "breadcrumbs.html" . }}
   {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
   {{- $dateHuman := .Date | time.Format ":date_long" }}
   {{- /* Hugo's .ReadingTime is CJK-aware when hasCJKLanguage/isCJKLanguage is set; floor to 1 min. */}}
@@ -23,39 +22,10 @@ with a real scroll-progress indicator.
   {{- $hasToc := and .Params.toc .TableOfContents }}
 
   <article class="entry{{ if $hasToc }} entry--with-toc{{ end }}">
-    <header class="entry-header">
-      {{- /* Kicker: first category (if any) · reading time — light editorial cue. */ -}}
-      {{- $cats := .GetTerms "categories" }}
-      {{- if or $cats $minutes }}
-      <p class="entry-kicker">
-        {{- with $cats }}
-          {{- range $i, $c := . }}{{ if $i }} · {{ end }}{{ $c.LinkTitle }}{{ end }}
-          {{- if $minutes }} · {{ end }}
-        {{- end }}
-        {{- if $minutes }}{{ $minutes }} {{ i18n "minRead" }}{{ end }}
-      </p>
-      {{- end }}
-
-      <h1 class="entry-title">{{ .Title }}</h1>
-
-      {{- with $dek }}
-      <p class="entry-dek">{{ . }}</p>
-      {{- end }}
-
-      <div class="entry-meta">
-        <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
-        {{- with .Params.author }}
-        <span class="entry-author">{{ i18n "publishedOn" }} {{ . }}</span>
-        {{- end }}
-        {{- if $isUpdated }}
-        <span class="entry-updated">{{ i18n "updatedOn" }} <time datetime="{{ $modMachine }}">{{ $modHuman }}</time></span>
-        {{- end }}
-      </div>
-    </header>
-
     {{- if $hasToc }}
-      {{- /* One TOC instance: collapsible on narrow screens, sticky rail on wide.
-         Duplicate .TableOfContents would emit two #TableOfContents ids. */ -}}
+      {{- /* TOC is a sibling of .entry-main (not a grid row peer of breadcrumbs).
+         Putting it in the same auto-row grid as the header made the first row
+         as tall as the outline — a huge blank under the breadcrumbs. */ -}}
     <details class="post-toc">
       <summary>{{ i18n "outline" }}</summary>
       {{ .TableOfContents }}
@@ -92,6 +62,39 @@ with a real scroll-progress indicator.
       })();
     </script>
     {{- end }}
+
+    <div class="entry-main">
+    {{ partial "breadcrumbs.html" . }}
+
+    <header class="entry-header">
+      {{- /* Kicker: first category (if any) · reading time — light editorial cue. */ -}}
+      {{- $cats := .GetTerms "categories" }}
+      {{- if or $cats $minutes }}
+      <p class="entry-kicker">
+        {{- with $cats }}
+          {{- range $i, $c := . }}{{ if $i }} · {{ end }}{{ $c.LinkTitle }}{{ end }}
+          {{- if $minutes }} · {{ end }}
+        {{- end }}
+        {{- if $minutes }}{{ $minutes }} {{ i18n "minRead" }}{{ end }}
+      </p>
+      {{- end }}
+
+      <h1 class="entry-title">{{ .Title }}</h1>
+
+      {{- with $dek }}
+      <p class="entry-dek">{{ . }}</p>
+      {{- end }}
+
+      <div class="entry-meta">
+        <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+        {{- with .Params.author }}
+        <span class="entry-author">{{ i18n "publishedOn" }} {{ . }}</span>
+        {{- end }}
+        {{- if $isUpdated }}
+        <span class="entry-updated">{{ i18n "updatedOn" }} <time datetime="{{ $modMachine }}">{{ $modHuman }}</time></span>
+        {{- end }}
+      </div>
+    </header>
 
     <div class="entry-content">
       {{ .Content }}
@@ -195,6 +198,7 @@ with a real scroll-progress indicator.
       </div>
     </nav>
     {{- end }}
+    </div>{{/* /.entry-main */}}
   </article>
 
   {{- /* Sticky TOC: reading progress + active heading highlight. */ -}}

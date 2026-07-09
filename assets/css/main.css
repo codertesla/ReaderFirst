@@ -13,17 +13,17 @@
 
 /* --- Design tokens ------------------------------------------------------- */
 :root {
-  /* Light palette (default) */
-  --bg:        #fafafa;
-  --bg-soft:   #f0f0f2;
-  --fg:        #1a1a1f;
-  --fg-muted:  #5b5b66;
-  --border:    #e2e2e6;
-  --link:      #1a3a8a;
-  --link-hover:#0a2a6a;
-  --accent:    #1a3a8a;
-  --code-bg:   #f1efea;
-  --selection: #cfe0ff;
+  /* Light palette — warm paper, not pure white (easier on the eyes for long reads). */
+  --bg:        #f3efe7;
+  --bg-soft:   #ebe6dc;
+  --fg:        #1a1a1a;
+  --fg-muted:  #5a564e;
+  --border:    #ddd6c8;
+  --link:      #2a4a7a;
+  --link-hover:#1a3558;
+  --accent:    #2a4a7a;
+  --code-bg:   #e8e2d6;
+  --selection: #d5e0f0;
 
   /* Chroma syntax-highlight tokens (used with noClasses=false) */
   --tok-kw:   #a13b6a;
@@ -41,6 +41,9 @@
                Consolas, "Liberation Mono", monospace;
   --measure:   70ch;          /* ideal reading line length       */
   --max-width: 680px;         /* content column on large screens */
+  --toc-rail:  13rem;         /* sticky outline column width     */
+  --toc-gap:   3.5rem;        /* gutter between TOC and prose    */
+  --toc-shell: calc(var(--toc-rail) + var(--toc-gap) + var(--max-width));
   --line-height: 1.75;
 
   --fs-base: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
@@ -131,34 +134,104 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   margin-inline: auto;
   padding-inline: var(--s-4);
 }
-/* Widen the main column when a sticky TOC rail is present (see .entry--with-toc). */
-.site-main:has(.entry--with-toc) {
-  max-width: calc(var(--max-width) + 14rem);
+/* When a sticky TOC is present, widen header/main/footer together so the
+   logo left edge lines up with the TOC rail (not with the reading column). */
+body:has(.entry--with-toc) .site-header,
+body:has(.entry--with-toc) .site-main,
+body:has(.entry--with-toc) .site-footer {
+  max-width: var(--toc-shell);
 }
 .site-header {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--s-3) var(--s-5);
-  padding-block: var(--s-6);
+  padding-block: var(--s-5);
+  min-height: 3.5rem;
 }
 .site-main { padding-block: var(--s-6); min-height: 60vh; }
 .site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-5);
   padding-block: var(--s-5);
   border-top: 1px solid var(--border);
   color: var(--fg-muted);
   font-size: var(--fs-small);
 }
+.footer-copy {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--s-2) var(--s-4);
+  margin: 0;
+  padding: 0;
+}
+/* Beat the global `a { color: var(--link) }` rule — footer links stay quiet. */
+.site-footer a {
+  color: var(--fg-muted);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+.site-footer a:hover {
+  color: var(--link);
+  text-decoration: none;
+}
+.footer-links a {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  white-space: nowrap;
+  padding-block: 0.15em;
+}
+.footer-links a:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: calc(var(--s-4) / -2);
+  top: 50%;
+  width: 1px;
+  height: 0.75em;
+  background: var(--border);
+  transform: translate(50%, -50%);
+}
+.footer-links a.footer-top-link { color: var(--accent); }
+.footer-links a.footer-top-link:hover { color: var(--link-hover); }
+@media (max-width: 520px) {
+  .footer-links { justify-content: flex-start; }
+  .footer-links a:not(:last-child)::after { display: none; }
+}
 
-.site-brand { margin-right: auto; }
+.site-brand {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+}
 .site-title {
   margin: 0;
   font-family: var(--font-mono);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 .site-title a { color: var(--fg); text-decoration: none; }
+.site-nav {
+  display: flex;
+  align-items: center;
+}
 
 /* --- Navigation ---------------------------------------------------------- */
 .site-nav ul {
@@ -762,26 +835,23 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
   transition: width 0.1s linear;
 }
 
-/* Wide viewports: sticky TOC rail beside the reading column. */
+/* Wide viewports: sticky TOC rail beside a single reading stack.
+   Two cells only (TOC | .entry-main) — never put TOC in the same auto-rows
+   as breadcrumbs/header, or the first row grows to the outline's height. */
 @media (min-width: 1100px) {
   .entry--with-toc {
     display: grid;
-    grid-template-columns: 11.5rem minmax(0, var(--max-width));
-    column-gap: 2.5rem;
-    justify-content: center;
+    grid-template-columns: var(--toc-rail) minmax(0, 1fr);
+    column-gap: var(--toc-gap);
     align-items: start;
-  }
-  .entry--with-toc > .entry-header {
-    grid-column: 2;
   }
   .entry--with-toc > .post-toc {
     grid-column: 1;
-    grid-row: 2 / -1;
     position: sticky;
     top: var(--s-5);
     align-self: start;
     margin: 0;
-    padding: var(--s-2) 0 0;
+    padding: 0;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -802,13 +872,15 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
   .entry--with-toc > .post-toc > summary::marker { content: ""; }
   .entry--with-toc > .post-toc ul { padding-left: 0; }
   .entry--with-toc > .post-toc ul ul { padding-left: var(--s-3); }
-  .entry--with-toc > .entry-content,
-  .entry--with-toc > .entry-share,
-  .entry--with-toc > .author-card,
-  .entry--with-toc > .entry-tags,
-  .entry--with-toc > .related,
-  .entry--with-toc > .post-nav {
+  .entry--with-toc > .post-toc a {
+    display: block;
+    line-height: 1.35;
+    padding-block: 0.15em;
+    overflow-wrap: anywhere;
+  }
+  .entry--with-toc > .entry-main {
     grid-column: 2;
+    min-width: 0;
   }
 }
 
@@ -938,15 +1010,9 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
 [dir="rtl"] .all-posts-link { text-align: left; }
 @media (min-width: 1100px) {
   [dir="rtl"] .entry--with-toc {
-    grid-template-columns: minmax(0, var(--max-width)) 11.5rem;
+    grid-template-columns: minmax(0, 1fr) var(--toc-rail);
   }
-  [dir="rtl"] .entry--with-toc > .entry-header,
-  [dir="rtl"] .entry--with-toc > .entry-content,
-  [dir="rtl"] .entry--with-toc > .entry-share,
-  [dir="rtl"] .entry--with-toc > .author-card,
-  [dir="rtl"] .entry--with-toc > .entry-tags,
-  [dir="rtl"] .entry--with-toc > .related,
-  [dir="rtl"] .entry--with-toc > .post-nav { grid-column: 1; }
+  [dir="rtl"] .entry--with-toc > .entry-main { grid-column: 1; }
   [dir="rtl"] .entry--with-toc > .post-toc { grid-column: 2; }
   [dir="rtl"] .entry--with-toc > .post-toc ul { padding-right: 0; }
   [dir="rtl"] .entry--with-toc > .post-toc ul ul { padding-right: var(--s-3); }
@@ -1008,6 +1074,7 @@ hr { margin: var(--s-6) 0; border: 0; border-top: 1px solid var(--border); }
   .reading-progress,
   .related,
   .post-nav,
+  .footer-links,
   .site-footer {
     display: none !important;
   }

@@ -115,3 +115,18 @@ other = "下一篇"
 
 [aside]
 other = "旁注"
+
+[footerLinks]
+other = "站点链接"
+
+[rss]
+other = "RSS"
+
+[jsonFeed]
+other = "JSON Feed"
+
+[sitemap]
+other = "站点地图"
+
+[backToTop]
+other = "回到顶部 ↑"
