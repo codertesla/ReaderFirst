@@ -1,28 +1,35 @@
 {{- /*
 pagination.html — minimal monospace prev/next pager.
 
-Renders only when there is more than one page. Older posts sit on the left
-(Paginator.Prev = lower page number = older), newer on the right. Disabled
-ends are shown as inert text so the nav shape stays stable.
+Renders only when there is more than one page. In Hugo's paginator, .Prev
+points to the SMALLER page number = NEWER posts, and .Next to the LARGER
+page number = OLDER posts. The home/section lists are newest-first, so newer
+sits on the left (lower page number) and older on the right; the labels below
+follow that ordering. Disabled ends are shown as inert text so the nav shape
+stays stable.
 
-@context {page} page The current list page (must expose .Paginator).
+The paginator is created by the calling template (via .Paginate) and passed in
+as "paginator" — calling .Paginator here too would error ("called more than
+once").
+
+@context {dict} dict with key "paginator" (a *page.Paginator).
 */}}
-{{- $p := .Paginator }}
+{{- $p := .paginator }}
 {{- if gt $p.TotalPages 1 }}
 <nav class="pagination" aria-label="{{ i18n "pagination" }}">
   <span class="page-prev">
     {{- with $p.Prev }}
-    <a href="{{ .URL }}" rel="prev">&larr; {{ i18n "older" }}</a>
+    <a href="{{ .URL }}" rel="prev">&larr; {{ i18n "newer" }}</a>
     {{- else }}
-    <span class="page-disabled" aria-disabled="true">&larr; {{ i18n "older" }}</span>
+    <span class="page-disabled" aria-disabled="true">&larr; {{ i18n "newer" }}</span>
     {{- end }}
   </span>
   <span class="page-num">{{ i18n "pageOf" (dict "PageNumber" $p.PageNumber "TotalPages" $p.TotalPages) }}</span>
   <span class="page-next">
     {{- with $p.Next }}
-    <a href="{{ .URL }}" rel="next">{{ i18n "newer" }} &rarr;</a>
+    <a href="{{ .URL }}" rel="next">{{ i18n "older" }} &rarr;</a>
     {{- else }}
-    <span class="page-disabled" aria-disabled="true">{{ i18n "newer" }} &rarr;</span>
+    <span class="page-disabled" aria-disabled="true">{{ i18n "older" }} &rarr;</span>
     {{- end }}
   </span>
 </nav>

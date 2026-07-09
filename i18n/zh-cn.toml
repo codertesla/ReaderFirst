@@ -19,12 +19,6 @@ other = "分类"
 [toggleTheme]
 other = "切换主题配色"
 
-[themeLight]
-other = "浅色"
-
-[themeDark]
-other = "深色"
-
 [allRightsReserved]
 other = "保留所有权利"
 

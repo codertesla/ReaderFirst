@@ -19,12 +19,6 @@ other = "Categories"
 [toggleTheme]
 other = "Toggle color theme"
 
-[themeLight]
-other = "Light"
-
-[themeDark]
-other = "Dark"
-
 [allRightsReserved]
 other = "All rights reserved"
 

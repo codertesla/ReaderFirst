@@ -6,7 +6,10 @@ edition or image processing required); remote/static images degrade to a
 plain <img>.
 */}}
 {{- $dest := .Destination -}}
-{{- $alt := .PlainText | safeHTML -}}
+{{- /* .PlainText is already plain text; let Hugo auto-escape it in the
+   attribute context rather than marking it safeHTML (which would let a
+   double-quote in the alt text break out of the attribute). */ -}}
+{{- $alt := .PlainText -}}
 {{- $res := "" -}}
 {{- if and .Page (not (hasPrefix $dest "http")) (not (hasPrefix $dest "/")) -}}
   {{- with .Page.Resources.GetMatch $dest -}}{{ $res = . }}{{- end -}}

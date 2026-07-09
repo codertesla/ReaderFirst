@@ -35,6 +35,18 @@ description = 'A minimalist, reading-first Hugo theme optimized for humans and A
 author = 'ReaderFirst'
 # Explicit main section for home lists, JSON Feed, and related-post scoping.
 mainSections = ['posts']
+# Posts per page on the home / section / term listings. Consumed directly by
+# the templates via .Paginate, so it is version-independent (Hugo's native
+# pagination.pageSize key is ignored by .Paginator in some builds).
+paginateSize = 10
+# Optional design tokens — uncomment and tweak to restyle without forking the
+# CSS. Every key is optional; omit for the default look.
+# [params.style]
+#   bodyFont    = 'Georgia, "Times New Roman", serif'  # reading-column font
+#   headingFont = 'Georgia, "Times New Roman", serif'  # site/entry titles + nav
+#   accent      = '#7a2e2e'                            # link + emphasis color
+#   maxWidth    = '720px'                              # content column width
+#   measure     = '72ch'                              # ideal line length
 # logo = 'images/logo.png'              # uncomment to populate publisher.logo in JSON-LD
 # default_og_image = 'images/og.png'    # uncomment for a fallback social share image
 # twitter = '@readerfirst'              # uncomment for twitter:site
@@ -42,9 +54,6 @@ mainSections = ['posts']
 [taxonomies]
 tag = 'tags'
 category = 'categories'
-
-[pagination]
-pageSize = 10
 
 # Powers the server-side "Related posts" block in single.html.
 [related]

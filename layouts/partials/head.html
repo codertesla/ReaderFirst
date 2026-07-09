@@ -38,6 +38,32 @@ Philosophy: reading-first, AI-friendly, zero heavy JS, CSS < 10KB inlined.
 {{- partialCached "head/css.html" . }}
 {{- partial "head/js.html" . }}
 
+{{- /* Opt-in design tokens: override the CSS custom properties from
+   [params.style] when set. Defaults in assets/css/main.css are untouched, so
+   this is a no-op unless the site owner chooses to restyle (e.g. switch the
+   headings from monospace to a serif stack). Values come from the site's own
+   config, not user input, so they are trusted. */ -}}
+{{- with site.Params.style }}
+  <style id="rf-style-overrides">
+    {{- with .bodyFont }}
+    body { font-family: {{ . }}; }
+    {{- end }}
+    {{- with .headingFont }}
+    .site-title, .site-nav a, .entry-title, .post-list h2, .post-list h3,
+    .entry-meta, .related-post-title, .post-nav-title, .pagination { font-family: {{ . }}; }
+    {{- end }}
+    {{- with .accent }}
+    :root { --accent: {{ . }}; --link: {{ . }}; }
+    {{- end }}
+    {{- with .maxWidth }}
+    :root { --max-width: {{ . }}; }
+    {{- end }}
+    {{- with .measure }}
+    :root { --measure: {{ . }}; }
+    {{- end }}
+  </style>
+{{- end }}
+
 {{- /* User extension hook: create layouts/partials/head/custom.html to inject more. */ -}}
 {{- if templates.Exists "partials/head/custom.html" }}
   {{- partial "head/custom.html" . }}

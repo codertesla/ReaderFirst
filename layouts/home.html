@@ -14,7 +14,10 @@ Renders the home page's own content (if any) followed by a semantic
   </div>
   {{- end }}
 
-  {{- $paginator := .Paginator }}
+  {{- /* Scope the front page to mainSections so it agrees with the JSON Feed
+     (layouts/index.json) on what counts as a "post". */ -}}
+  {{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections }}
+  {{- $paginator := .Paginate $posts (site.Params.paginateSize | default 10) }}
   {{- with $paginator.Pages }}
   <section class="post-list-section" aria-label="{{ i18n "recentPosts" }}">
     <h2 class="post-list-title">{{ i18n "recentPosts" }}</h2>
@@ -26,5 +29,5 @@ Renders the home page's own content (if any) followed by a semantic
   </section>
   {{- end }}
 
-  {{ partial "pagination.html" . }}
+  {{ partial "pagination.html" (dict "paginator" $paginator) }}
 {{ end }}

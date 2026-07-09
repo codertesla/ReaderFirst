@@ -15,9 +15,10 @@ pages with date, title link and summary.
   </div>
   {{- end }}
 
-  {{- with .Paginator.Pages }}
+  {{- $paginator := .Paginate .Pages (site.Params.paginateSize | default 10) }}
+  {{- with $paginator.Pages }}
   {{ partial "post-list.html" (dict "pages" . "heading" "h2") }}
   {{- end }}
 
-  {{ partial "pagination.html" . }}
+  {{ partial "pagination.html" (dict "paginator" $paginator) }}
 {{ end }}

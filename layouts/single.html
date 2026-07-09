@@ -160,7 +160,12 @@ reading time is derived from WordCount (≈200 wpm). Stays in sync with the
       overlay.setAttribute('aria-label', {{ i18n "imageViewer" }});
       var big = document.createElement('img');
       overlay.appendChild(big);
-      overlay.addEventListener('click', function () { overlay.classList.remove('open'); });
+      overlay.addEventListener('click', function (e) {
+        {{- /* Close only when the backdrop itself is clicked, not when the
+           enlarged image (a child) is clicked — otherwise zooming in would
+           immediately dismiss the lightbox via event bubbling. */ -}}
+        if (e.target === overlay) overlay.classList.remove('open');
+      });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') overlay.classList.remove('open');
       });

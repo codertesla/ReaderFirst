@@ -8,6 +8,11 @@ resources/_gen/
 *.bak
 *.bak2
 
+# Local agent / IDE scratch (not part of the theme)
+.workbuddy/
+.cursor/
+REVIEW.md
+
 # OS files
 .DS_Store
 Thumbs.db
