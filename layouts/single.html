@@ -28,13 +28,13 @@ with a real scroll-progress indicator.
          as tall as the outline — a huge blank under the breadcrumbs. */ -}}
     <details class="post-toc">
       <summary>{{ i18n "outline" }}</summary>
-      {{ .TableOfContents }}
       <div class="reading-progress" hidden>
         <div class="progress-label"><span class="progress-pct">0</span>% {{ i18n "read" }}</div>
         <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <div class="progress-fill"></div>
         </div>
       </div>
+      {{ .TableOfContents }}
     </details>
     <script>
       (function () {

@@ -53,7 +53,7 @@ Philosophy: reading-first, AI-friendly, zero heavy JS, CSS < 10KB inlined.
     .entry-meta, .related-post-title, .post-nav-title, .pagination { font-family: {{ . }}; }
     {{- end }}
     {{- with .accent }}
-    :root { --accent: {{ . }}; --link: {{ . }}; }
+    :root, [data-theme="dark"] { --accent: {{ . }}; --link: {{ . }}; }
     {{- end }}
     {{- with .maxWidth }}
     :root { --max-width: {{ . }}; }
